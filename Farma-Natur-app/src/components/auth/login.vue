@@ -1,10 +1,50 @@
 <template>
     <div class="auth-form">
-      <h2>Login</h2>
+      <h2><strong>Login</strong></h2>
       <p>Bienvenido de nuevo</p>
       <form @submit.prevent="handleLogin">
-        <input v-model="username" type="text" placeholder="Nombre de usuario" required />
-        <input v-model="password" type="password" placeholder="Contraseña" required />
+        <!-- Input para username con efecto flotante -->
+        <div class="form-control">
+          <input 
+            v-model="username" 
+            type="text" 
+            required 
+            @focus="focusUsername = true"
+            @blur="focusUsername = username.length > 0"
+          />
+          <label :class="{ active: focusUsername }">
+            <span style="transition-delay:0ms">U</span>
+            <span style="transition-delay:50ms">s</span>
+            <span style="transition-delay:100ms">e</span>
+            <span style="transition-delay:150ms">r</span>
+            <span style="transition-delay:200ms">n</span>
+            <span style="transition-delay:250ms">a</span>
+            <span style="transition-delay:300ms">m</span>
+            <span style="transition-delay:350ms">e</span>
+          </label>
+        </div>
+  
+        <!-- Input para password con efecto flotante -->
+        <div class="form-control">
+          <input 
+            v-model="password" 
+            type="password" 
+            required
+            @focus="focusPassword = true"
+            @blur="focusPassword = password.length > 0"
+          />
+          <label :class="{ active: focusPassword }">
+            <span style="transition-delay:0ms">P</span>
+            <span style="transition-delay:50ms">a</span>
+            <span style="transition-delay:100ms">s</span>
+            <span style="transition-delay:150ms">s</span>
+            <span style="transition-delay:200ms">w</span>
+            <span style="transition-delay:250ms">o</span>
+            <span style="transition-delay:300ms">r</span>
+            <span style="transition-delay:350ms">d</span>
+          </label>
+        </div>
+  
         <button type="submit">Login
             <!--Añadimos plantilla de ui verse -->
             <div class="star-1">
@@ -152,9 +192,30 @@
   <style scoped>
   /* Puedes adaptar los estilos aquí */
   .auth-form { text-align: center; }
-  input { margin: 10px 0; padding: 10px; width: 100%; }
   button {  color: white; padding: 10px; width: 100%; }
-    /* Estilos para las estrellas */
+  /*Estilos para las letras */
+  .auth-form {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.auth-form h2 {
+  font-size: 36px; 
+  font-weight: bold; 
+  margin-bottom: 10px; 
+}
+
+.auth-form p {
+  font-size: 20px;
+  color: #000000; 
+  margin-bottom: 20px; 
+}  
+  
+  /* Estilos para las estrellas */
     button {
   position: relative;
   padding: 12px 35px;
@@ -304,7 +365,49 @@ button:hover .star-6 {
 .fil0 {
   fill: #effff5;
 }
+/* Estilos para los inputs  */
+.form-control {
+  position: relative;
+  margin: 20px 10px 40px;
+  width: 100%;
+}
 
-  
+.form-control input {
+  background-color: transparent;
+  border: 0;
+  border-bottom: 2px #000000 solid;
+  display: block;
+  width: 100%;
+  padding: 15px 0;
+  font-size: 18px;
+  color: #000000;
+}
+
+.form-control input:focus,
+.form-control input:valid {
+  outline: 0;
+  border-bottom-color: rgb(0, 112, 17);
+}
+
+.form-control label {
+  position: absolute;
+  top: 15px;
+  left: 0;
+  pointer-events: none;
+}
+
+.form-control label span {
+  display: inline-block;
+  font-size: 18px;
+  min-width: 5px;
+  color: #000000;
+  transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.form-control input:focus+label span,
+.form-control input:valid+label span {
+  color: rgb(23, 114, 0);
+  transform: translateY(-30px);
+}
   </style>
   

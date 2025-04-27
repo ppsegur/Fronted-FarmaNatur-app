@@ -15,16 +15,16 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Ocupa toda la altura de la ventana */
-  background-color: #f4f5f4; /* Fondo claro */
-  padding: 0; /* Elimina el padding para que ocupe todo el espacio */
+  height: 100vh; 
+  background-color: #f4f5f4; 
+  padding: 0; 
   margin: 0; 
-  overflow: hidden; /* Evita el scroll */
+
   display: flex;
   flex-direction: column;
   height: 100vh;
   width: 100%;
-  min-width: 1200px;
+  min-width: 1280px;
 }
 
 

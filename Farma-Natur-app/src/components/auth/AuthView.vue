@@ -26,22 +26,25 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%; /* Ocupa todo el espacio disponible */
-    width: 100%; /* Asegura que ocupe todo el ancho */
-    background-color: #ffffff; /* Fondo claro */
-  }
+    height: 100%; 
+    width: 100%; 
+    background-color: #ffffff; 
+   
+}
   
   .auth-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(173, 239, 123); /* Fondo blanco para la tarjeta */
-    border-radius: 15px; /* Bordes redondeados */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para efecto de tarjeta */
+    background-color: rgb(173, 239, 123); 
+    border-radius: 15px;
+    box-shadow: 25px 30px 20px rgba(0, 0, 0, 0.5);
     padding: 20px;
-    width: 100%; /* Ocupa todo el ancho */
-    max-width: 1200px; /* Limita el ancho máximo */
-    height: 90%; /* Ajusta la altura para que sea proporcional */
+    width: 100%; 
+    max-width: 1200px; 
+    height: 90%; 
+    border: 3px solid black;
+    
   }
   
   .form-section {
@@ -53,20 +56,20 @@
   .logo-section {
     flex: 1;
     text-align: center;
-    height: 100%; /* Asegura que ocupe toda la altura */
+    height: 100%; 
     padding: 30px;
     color: white;
-    background-image: url('../../assets/img/fotoLogin.jpg'); /* Imagen como fondo */
-    background-size: cover; /* Asegura que la imagen cubra todo el div */
-    background-position: center; /* Centra la imagen */
-    border-radius: 15px; /* Bordes redondeados para que coincida con la tarjeta */
+    background-image: url('../../assets/img/fotoLogin.jpg'); 
+    background-size: cover;
+    background-position: center; 
+    border-radius: 15px;
   }
   
   .logo-section h1 {
     margin-top: 20px;
     font-size: 36px;
     font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Sombra para el texto */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
   }
   
   button {
@@ -75,9 +78,5 @@
     border-radius: 8px;
   }
   
-  input {
-    font-size: 16px;
-    padding: 12px;
-    border-radius: 8px;
-  }
+
   </style>
