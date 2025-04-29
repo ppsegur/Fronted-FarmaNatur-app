@@ -118,8 +118,8 @@ La estructura modular garantiza escalabilidad y claridad:
 
 ## 8. Diseño UI/UX
 
-- 🎨 Paleta de colores: Verde, azul y blanco  
- ## 🔍 Diseño Figma
+- 🎨 Paleta de colores: Verde, azul y blanco 
+ # 🔍 Diseño Figma
 
 [✨ Ver diseño en Figma](https://www.figma.com/design/DfvcTrNuvsvGRXWgNrzOjq/FarmaApp?node-id=4-34&t=89zc4DeU3uDM8eOm-1)
 
@@ -133,6 +133,7 @@ La estructura modular garantiza escalabilidad y claridad:
   - Reserva de cita
   - Comentar producto
 - ✔️ Validación de flujos críticos y vistas protegidas
+---
 -- Pruebas realizadas en el Backend:
   [👨‍💻 Ver plan de prubas BACKEND](https://docs.google.com/spreadsheets/d/10QcS-cPko2D2f58Ouh0B5J2aEdARNVyq-dRoOhzOk3I/edit?usp=sharing)
 
