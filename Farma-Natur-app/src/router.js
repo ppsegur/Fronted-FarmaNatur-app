@@ -39,13 +39,23 @@ const router = createRouter({
 
 // Protección de rutas
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token')
+    if (!token && to.meta.requiresAuth) {
+      return next('/login')
+    }
   
-  if (to.meta.requiresAuth && !token) {
-    next('/auth') // si no hay token, manda al login
-  } else {
+    if (token) {
+      const decoded = jwt_decode(token)
+  
+      if (!decoded.enabled) return next('/verificar') // si no está verificado, bloqueamos
+  
+      if (to.meta.role && to.meta.role !== decoded.role) {
+        return next('/no-autorizado')
+      }
+    }
+  
     next()
-  }
-})
+  })
+  
 
 export default router
