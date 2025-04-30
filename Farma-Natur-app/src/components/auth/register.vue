@@ -233,7 +233,7 @@
     }
     try {
       await authService.register({ email: email.value, username: username.value, password: password.value })
-      router.push('/login')
+      router.push('/verify')
     } catch (error) {
       console.error('Registration failed', error)
     }

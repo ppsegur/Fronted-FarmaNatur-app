@@ -38,7 +38,7 @@ const router = createRouter({
 })
 
 // Protección de rutas
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, _from, next) => {
     const token = localStorage.getItem('token')
     if (!token && to.meta.requiresAuth) {
       return next('/login')
