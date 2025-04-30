@@ -20,6 +20,31 @@
             <span style="transition-delay:200ms">l</span>
           </label>
         </div>
+        <!-- Input para confirmar email -->
+        <div class="form-control">
+          <input 
+            v-model="confirmEmail" 
+            type="email" 
+            required
+            @focus="focusConfirmEmail = true"
+            @blur="focusConfirmEmail = confirmEmail.length > 0"
+          />
+          <label :class="{ active: focusConfirmEmail }">
+            <span style="transition-delay:0ms">C</span>
+            <span style="transition-delay:50ms">o</span>
+            <span style="transition-delay:100ms">n</span>
+            <span style="transition-delay:150ms">f</span>
+            <span style="transition-delay:200ms">i</span>
+            <span style="transition-delay:250ms">r</span>
+            <span style="transition-delay:300ms">m</span>
+            <span style="transition-delay:350ms"> </span>
+            <span style="transition-delay:400ms">E</span>
+            <span style="transition-delay:450ms">m</span>
+            <span style="transition-delay:500ms">a</span>
+            <span style="transition-delay:550ms">i</span>
+            <span style="transition-delay:600ms">l</span>
+          </label>
+        </div>
   
         <!-- Input para username -->
         <div class="form-control">
@@ -225,10 +250,19 @@
   const username = ref('')
   const password = ref('')
   const confirmPassword = ref('')
+  const confirmEmail = ref('')
   
   const handleRegister = async () => {
     if (password.value !== confirmPassword.value) {
       alert('Las contraseñas no coinciden')
+      return
+    }
+    if (email.value !== confirmEmail.value) {
+      alert('Los correos no coinciden')
+      return
+    }
+    if (username.value.length < 3) {
+      alert('El nombre de usuario debe tener al menos 3 caracteres')
       return
     }
     try {

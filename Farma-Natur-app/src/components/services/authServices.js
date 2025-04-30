@@ -50,7 +50,13 @@ const register = async (userData) => {
 
 
 // Función de verificación
-
+const verifyAccount = async ({ email, token }) => {
+    const response = await axios.post(`${API_URL}/verify-2fa`, {
+      email,
+      token
+    })
+    return response.data
+  }
 
 // Función
 const logout = () => {
