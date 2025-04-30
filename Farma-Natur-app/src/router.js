@@ -1,8 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-// Corrige las rutas de los componentes
+
 import AuthView from '@/components/auth/AuthView.vue'
 import DashboardView from '@/components/Views/dashboard.vue'
+import Verify from './components/auth/verify.vue'
+import HomeView from './components/Views/HomeView.vue'
 
 const routes = [
   {
@@ -18,7 +20,16 @@ const routes = [
     component: DashboardView,
     meta: { requiresAuth: true }
   },
-  // puedes añadir más rutas
+    {
+        path: '/verify',
+        component: Verify, 
+    },
+    {
+        path:'/home',
+        component: HomeView,  
+        meta: { requiresAuth: false }
+    }
+ 
 ]
 
 const router = createRouter({
