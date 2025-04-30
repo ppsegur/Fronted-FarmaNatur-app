@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { jwtDecode } from 'jwt-decode'
 
 
 import AuthView from '@/components/auth/AuthView.vue'
 import DashboardView from '@/components/Views/dashboard.vue'
-import Verify from './components/auth/verify.vue'
-import HomeView from './components/Views/HomeView.vue'
+import Verify from '@/components/auth/verify.vue'
+import HomeView from '@/components/Views/HomeView.vue'
 
 const routes = [
   {
@@ -45,12 +46,12 @@ router.beforeEach((to, _from, next) => {
     }
   
     if (token) {
-      const decoded = jwt_decode(token)
+        const decoded = jwtDecode(token)
   
-      if (!decoded.enabled) return next('/verificar') // si no está verificado, bloqueamos
+      if (!decoded.enabled) return next('/verify') // si no está verificado, bloqueamos
   
       if (to.meta.role && to.meta.role !== decoded.role) {
-        return next('/no-autorizado')
+        return next('/')
       }
     }
   

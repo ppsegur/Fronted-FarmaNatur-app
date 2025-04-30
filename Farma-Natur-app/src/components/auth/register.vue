@@ -26,8 +26,7 @@
             v-model="confirmEmail" 
             type="email" 
             required
-            @focus="focusConfirmEmail = true"
-            @blur="focusConfirmEmail = confirmEmail.length > 0"
+          
           />
           <label :class="{ active: focusConfirmEmail }">
             <span style="transition-delay:0ms">C</span>
@@ -52,8 +51,7 @@
             v-model="username" 
             type="text" 
             required
-            @focus="focusUsername = true"
-            @blur="focusUsername = username.length > 0"
+        
           />
           <label :class="{ active: focusUsername }">
             <span style="transition-delay:0ms">U</span>
@@ -94,8 +92,7 @@
             v-model="confirmPassword" 
             type="password" 
             required
-            @focus="focusConfirmPassword = true"
-            @blur="focusConfirmPassword = confirmPassword.length > 0"
+           
           />
           <label :class="{ active: focusConfirmPassword }">
             <span style="transition-delay:0ms">C</span>

@@ -21,22 +21,19 @@
   
   <script setup>
   import { ref } from 'vue'
-  import axios from 'axios'
   import { useRouter } from 'vue-router'
-  import {verifyAccount } from '@/services/authService.js'
-  
+  import authService from '../services/authServices'  
   const token = ref('')
   const showModal = ref(false)
   const router = useRouter()
   
-  import { verifyAccount } from '../services/authServices'
 
 const handleVerify = async () => {
   try {
     const email = localStorage.getItem('emailRegisterTemp')
-    const response = await verifyAccount({ email, token: token.value })
+    const response = await authService.verifyAccount({ email, token: token.value })
     alert('Cuenta verificada correctamente')
-    router.push('/login')
+    router.push('/auth')
   } catch (err) {
     alert('Código incorrecto o expirado')
   }
