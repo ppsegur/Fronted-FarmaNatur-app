@@ -267,6 +267,9 @@
     username: username.value,
     password: password.value,
   })
+  localStorage.setItem('emailRegisterTemp', email.value)
+  localStorage.setItem('usernameRegisterTemp', username.value)
+  
     try {
       await authService.register({ email: email.value, username: username.value, password: password.value,verifyEmail:confirmEmail.value, verifyPassword:confirmPassword.value })
       router.push('/verify')

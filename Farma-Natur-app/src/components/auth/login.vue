@@ -197,17 +197,17 @@ const handleLogin = async () => {
   try {
     const decoded = await authService.login({
       username: username.value,
-      password: password.value
+      password: password.value,
     })
-
-    if (!decoded.enabled) {
+    console.log('login ', decoded)
+    if (!decoded.verified ) {
       alert('Tu cuenta aún no ha sido verificada. Revisa tu correo.')
       return router.push('/verify')
     }
-
-    if (decoded.role === 'CLIENTE') {
-      router.push('/productos')
-    } else if (decoded.role === 'FARMACEUTICO') {
+ 
+    if ( decoded.role === 'CLIENTE') {
+      router.push('/home')
+    } else if ( decoded.role === 'FARMACEUTICO') {
       router.push('/dashboard')
     } else {
       router.push('/home') // fallback

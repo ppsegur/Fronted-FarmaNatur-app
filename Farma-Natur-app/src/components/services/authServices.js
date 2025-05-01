@@ -4,13 +4,12 @@ import { jwtDecode } from 'jwt-decode'  // ✅ CORRECTO
 
 
 const API_URL = 'http://localhost:8080/auth'
-
 const login = async (credentials) => {
   const response = await axios.post(`${API_URL}/login`, credentials)
   const { token } = response.data
   localStorage.setItem('token', token)
   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-  const decoded = jwt_decode(token)
+  const decoded = jwtDecode(token)
   return decoded
 }
 
@@ -18,9 +17,13 @@ const register = async (userData) => {
   return await axios.post(`${API_URL}/register`, userData)
 }
 
-const verifyAccount = async ({ email, token }) => {
-  const response = await axios.post(`${API_URL}/verify-2fa`, { email, token })
-  return response.data
+const verifyAccount = async ({ email, code }) => {
+  const response = await axios.post(`${API_URL}/verify-2fa`, { email, code })
+  const { token } = response.data
+  localStorage.setItem('token', token) // Actualiza el token en localStorage
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}` // Actualiza el header de autorización
+  return jwtDecode(token) // Devuelve el token decodificado
+
 }
 
 const logout = () => {
