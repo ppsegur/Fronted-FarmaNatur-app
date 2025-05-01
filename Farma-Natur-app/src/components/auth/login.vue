@@ -195,22 +195,33 @@ const errorMessage = ref('')
 
 const handleLogin = async () => {
   try {
-    await authService.login({ 
-      username: username.value, 
-      password: password.value 
+    const decoded = await authService.login({
+      username: username.value,
+      password: password.value
     })
-    router.push('/dashboard')
+
+    if (!decoded.enabled) {
+      alert('Tu cuenta aún no ha sido verificada. Revisa tu correo.')
+      return router.push('/verify')
+    }
+
+    if (decoded.role === 'CLIENTE') {
+      router.push('/productos')
+    } else if (decoded.role === 'FARMACEUTICO') {
+      router.push('/dashboard')
+    } else {
+      router.push('/home') // fallback
+    }
+
   } catch (error) {
-    console.error('Login failed', error)
-    errorMessage.value = 'Usuario o contraseña incorrectos'
+    console.error('Login fallido', error)
     showErrorModal.value = true
-    
-    // Ocultar automáticamente después de 5 segundos
     setTimeout(() => {
       showErrorModal.value = false
     }, 5000)
   }
 }
+
 </script>
   
   <style scoped>
