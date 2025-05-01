@@ -40,23 +40,29 @@ const router = createRouter({
 
 // Protección de rutas
 router.beforeEach((to, _from, next) => {
-    const token = localStorage.getItem('token')
-    if (!token && to.meta.requiresAuth) {
-      return next('/login')
+  const token = localStorage.getItem('token')
+
+  // Si no hay token y la ruta requiere autenticación, redirigir al login
+  if (!token && to.meta.requiresAuth) {
+    return next('/login')
+  }
+
+  if (token) {
+    const decoded = jwtDecode(token)
+
+    // Permitir acceso a /auth incluso si no está verificado
+    if (!decoded.verified && to.path !== '/verify' && to.path !== '/auth') {
+      return next('/verify')
     }
-  
-    if (token) {
-        const decoded = jwtDecode(token)
-  
-      if (!decoded.enabled) return next('/verify') // si no está verificado, bloqueamos
-  
-      if (to.meta.role && to.meta.role !== decoded.role) {
-        return next('/')
-      }
+
+    // Verificar roles si la ruta tiene un meta.role
+    if (to.meta.role && to.meta.role !== decoded.role) {
+      return next('/')
     }
-  
-    next()
-  })
+  }
+
+  next()
+})
   
 
 export default router
