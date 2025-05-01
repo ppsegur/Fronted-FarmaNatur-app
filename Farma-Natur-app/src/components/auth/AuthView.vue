@@ -56,7 +56,8 @@
   .logo-section {
     flex: 1;
     text-align: center;
-    height: 100%; 
+    min-height: 500px; 
+    min-width: 100px;
     padding: 30px;
     color: white;
     background-image: url('../../assets/img/fotoLogin.jpg'); 

@@ -6,47 +6,48 @@
 
    
       <form @submit.prevent="handleLogin">
-        <!-- Input para username con efecto flotante -->
-        <div class="form-control">
-          <input 
-            v-model="username" 
-            type="text" 
-            required 
-            @focus="focusUsername = true"
-            @blur="focusUsername = username.length > 0"
-          />
-          <label :class="{ active: focusUsername }">
-            <span style="transition-delay:0ms">U</span>
-            <span style="transition-delay:50ms">s</span>
-            <span style="transition-delay:100ms">e</span>
-            <span style="transition-delay:150ms">r</span>
-            <span style="transition-delay:200ms">n</span>
-            <span style="transition-delay:250ms">a</span>
-            <span style="transition-delay:300ms">m</span>
-            <span style="transition-delay:350ms">e</span>
-          </label>
-        </div>
-  
-        <!-- Input para password con efecto flotante -->
-        <div class="form-control">
-          <input 
-            v-model="password" 
-            type="password" 
-            required
-            @focus="focusPassword = true"
-            @blur="focusPassword = password.length > 0"
-          />
-          <label :class="{ active: focusPassword }">
-            <span style="transition-delay:0ms">P</span>
-            <span style="transition-delay:50ms">a</span>
-            <span style="transition-delay:100ms">s</span>
-            <span style="transition-delay:150ms">s</span>
-            <span style="transition-delay:200ms">w</span>
-            <span style="transition-delay:250ms">o</span>
-            <span style="transition-delay:300ms">r</span>
-            <span style="transition-delay:350ms">d</span>
-          </label>
-        </div>
+      <!-- Input para username con efecto flotante -->
+      <div class="wave-group">
+        <input 
+          v-model="username" 
+          type="text" 
+          class="input" 
+          required 
+        />
+        <span class="bar"></span>
+        <label class="label">
+          <span class="label-char" style="--index: 0">U</span>
+          <span class="label-char" style="--index: 1">s</span>
+          <span class="label-char" style="--index: 2">e</span>
+          <span class="label-char" style="--index: 3">r</span>
+          <span class="label-char" style="--index: 4">n</span>
+          <span class="label-char" style="--index: 5">a</span>
+          <span class="label-char" style="--index: 6">m</span>
+          <span class="label-char" style="--index: 7">e</span>
+        </label>
+        <i class="pi pi-user input-icon"></i>
+      </div>
+      <div class="wave-group">
+        <input 
+          v-model="password" 
+          type="password" 
+          class="input" 
+          required 
+        />
+        <span class="bar"></span>
+        <label class="label">
+          <span class="label-char" style="--index: 0">P</span>
+          <span class="label-char" style="--index: 1">a</span>
+          <span class="label-char" style="--index: 2">s</span>
+          <span class="label-char" style="--index: 3">s</span>
+          <span class="label-char" style="--index: 4">w</span>
+          <span class="label-char" style="--index: 5">o</span>
+          <span class="label-char" style="--index: 6">r</span>
+          <span class="label-char" style="--index: 7">d</span>
+        </label>
+        <i class="pi pi-lock input-icon"></i>
+      </div>
+
   
         <button type="submit">Login
             <!--Añadimos plantilla de ui verse -->
@@ -181,6 +182,8 @@
   </template>
   
   <script setup>
+  
+import 'primeicons/primeicons.css'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import authService from '../services/authServices'
@@ -225,10 +228,8 @@ const handleLogin = async () => {
 </script>
   
   <style scoped>
-  /* Puedes adaptar los estilos aquí */
   .auth-form { text-align: center; }
   button {  color: white; padding: 10px; width: 100%; }
-  /*Estilos para las letras */
   .auth-form {
   text-align: center;
   display: flex;
@@ -239,16 +240,89 @@ const handleLogin = async () => {
 }
 
 .auth-form h2 {
-  font-size: 36px; 
-  font-weight: bold; 
-  margin-bottom: 10px; 
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 .auth-form p {
   font-size: 20px;
-  color: #000000; 
-  margin-bottom: 20px; 
-}  
+  color: #000000;
+  margin-bottom: 20px;
+}
+
+/* Estilos para los inputs con efecto flotante */
+.wave-group {
+  position: relative;
+  margin: 20px 0;
+}
+
+.wave-group .input {
+  font-size: 16px;
+  padding: 10px 10px 10px 5px;
+  display: block;
+  width: 200px;
+  border: none;
+  border-bottom: 1px solid #515151;
+  background: transparent;
+}
+
+.wave-group .input:focus {
+  outline: none;
+}
+
+.wave-group .label {
+  color: #999;
+  font-size: 18px;
+  font-weight: normal;
+  position: absolute;
+  pointer-events: none;
+  left: 5px;
+  top: 10px;
+  display: flex;
+}
+
+.wave-group .label-char {
+  transition: 0.2s ease all;
+  transition-delay: calc(var(--index) * 0.05s);
+}
+
+.wave-group .input:focus ~ .label .label-char,
+.wave-group .input:valid ~ .label .label-char {
+  transform: translateY(-20px);
+  font-size: 14px;
+  color: #2b681f;
+}
+
+.wave-group .bar {
+  position: relative;
+  display: block;
+  width: 200px;
+}
+
+.wave-group .bar:before,
+.wave-group .bar:after {
+  content: '';
+  height: 2px;
+  width: 0;
+  bottom: 1px;
+  position: absolute;
+  background: #00d343;
+  transition: 0.2s ease all;
+}
+
+.wave-group .bar:before {
+  left: 50%;
+}
+
+.wave-group .bar:after {
+  right: 50%;
+}
+
+.wave-group .input:focus ~ .bar:before,
+.wave-group .input:focus ~ .bar:after {
+  width: 50%;
+}
   
   /* Estilos para las estrellas */
     button {
@@ -439,8 +513,8 @@ button:hover .star-6 {
   transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.form-control input:focus+label span,
-.form-control input:valid+label span {
+.form-control input:focus + label span,
+.form-control input:valid + label span {
   color: rgb(23, 114, 0);
   transform: translateY(-30px);
 }
@@ -485,5 +559,29 @@ button:hover .star-6 {
 .error__close path {
   fill: #fff;
 }
+.input-icon {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #000000;
+  transition: all 0.3s ease;
+}
+
+.form-control input:focus ~ .input-icon,
+.form-control input:valid ~ .input-icon {
+  color: rgb(0, 112, 17);
+}
+
+/* Ajustar el padding derecho del input para que no se solape con el icono */
+.form-control input {
+  padding-right: 30px !important;
+}
+
+/* Asegurar que el contenedor tenga posición relativa */
+.form-control {
+  position: relative;
+}
+
   </style>
   
