@@ -262,8 +262,13 @@
       alert('El nombre de usuario debe tener al menos 3 caracteres')
       return
     }
+    console.log({
+    email: email.value,
+    username: username.value,
+    password: password.value,
+  })
     try {
-      await authService.register({ email: email.value, username: username.value, password: password.value })
+      await authService.register({ email: email.value, username: username.value, password: password.value,verifyEmail:confirmEmail.value, verifyPassword:confirmPassword.value })
       router.push('/verify')
     } catch (error) {
       console.error('Registration failed', error)
@@ -273,7 +278,7 @@
   
   <style scoped>
   .auth-form { text-align: center; }
-  input { margin: 10px 0; padding: 10px; width: 100%; }
+  input { margin:5px 0; padding: 5px; width: 100%; }
   button { color: white; padding: 10px; width: 100%; }
    /* Estilos para las estrellas */
    button {
@@ -435,13 +440,13 @@ button:hover .star-6 {
 }
 
 .auth-form h2 {
-  font-size: 36px; 
+  font-size: 30px; 
   font-weight: bold; 
-  margin-bottom: 10px; 
+  margin-bottom: 6px; 
 }
 
 .auth-form p {
-  font-size: 20px;
+  font-size: 17px;
   color: #000000; 
   margin-bottom: 20px; 
 }  
@@ -449,7 +454,7 @@ button:hover .star-6 {
 /* Estilos para los inputs  */
 .form-control {
   position: relative;
-  margin: 20px 10px 40px;
+  margin: 20px 10px 20px;
   width: 100%;
 }
 
