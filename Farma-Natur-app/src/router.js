@@ -6,6 +6,7 @@ import AuthView from '@/components/auth/AuthView.vue'
 import DashboardView from '@/components/Views/dashboard.vue'
 import Verify from '@/components/auth/verify.vue'
 import HomeView from '@/components/Views/HomeView.vue'
+import UserDashBoard from './components/Views/Farmaceutico/UserDashBoard.vue'
 
 const routes = [
   {
@@ -29,6 +30,11 @@ const routes = [
         path:'/home',
         component: HomeView,  
         meta: { requiresAuth: false }
+    },
+    {
+      path:'/usuarios',
+      component: UserDashBoard,
+      meta: { requiresAuth: true, role: 'FARMACEUTICO' } // Solo accesible para farmaceuticos
     }
  
 ]
