@@ -1,24 +1,41 @@
+<script setup>
+import { ref } from 'vue';
+import FarmaNavBar from './FarmaNavBar.vue';
+
+const props = defineProps({
+  userName: {
+    type: String,
+    required: true,
+  },
+  userRole: {
+    type: String,
+    required: true,
+  },
+});
+
+const isNavBarOpen = ref(false);
+
+const toggleNavBar = () => {
+  isNavBarOpen.value = !isNavBarOpen.value;
+};
+</script>
 <template>
     <header class="farma-header">
       <button class="menu-button" @click="toggleNavBar">
         <i class="pi pi-bars"></i>
       </button>
-      <h1 class="header-title">Farma Natur</h1>
+    <h1 class="header-title">
+      <span style="color: greenyellow;">Farma</span> <span>Natur</span>
+    </h1>
     </header>
   
-    <FarmaNavBar v-if="isNavBarOpen" @close="toggleNavBar" />
+    <FarmaNavBar
+     v-if="isNavBarOpen" @close="toggleNavBar" 
+     :userName="userName" 
+     :userRole="userRole" />
   </template>
   
-  <script setup>
-  import { ref } from 'vue';
-  import FarmaNavBar from './FarmaNavBar.vue';
   
-  const isNavBarOpen = ref(false);
-  
-  const toggleNavBar = () => {
-    isNavBarOpen.value = !isNavBarOpen.value; // Corregido: faltaba .value
-  };
-  </script>
   
   <style scoped>
   .farma-header {

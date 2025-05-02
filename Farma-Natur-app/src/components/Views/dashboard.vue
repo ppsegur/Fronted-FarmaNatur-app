@@ -1,6 +1,8 @@
 <template>
     <div class="dashboard-container">
-      <FarmaHeader />
+      <FarmaHeader
+      :userName="username" 
+      :userRole="userRole"  />
       <div class="dashboard-content">
         <h1>Dashboard</h1>
         <p>Bienvenido al panel de control de Farma-Natur</p>
@@ -10,8 +12,24 @@
   </template>
   
   <script setup>
-  import FarmaHeader from '../MicroComponents/Farmaceutico/FarmaHeader.vue';
+  import { ref, onMounted } from 'vue'
+  import { jwtDecode } from 'jwt-decode'
+  import FarmaHeader from '../MicroComponents/Farmaceutico/FarmaHeader.vue'
+  
+  // Declaras los refs vacíos primero
+  const userName = ref('')
+  const userRole = ref('Farmaceutico')
+  
+  onMounted(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      const decoded = jwtDecode(token)
+      userName.value = decoded.name || decoded.username || 'Usuario'
+      userRole.value = decoded.role || 'Usuario'
+    }
+  })
   </script>
+  
   
   <style>
   .dashboard-container {
