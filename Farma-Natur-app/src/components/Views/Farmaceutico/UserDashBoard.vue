@@ -34,15 +34,34 @@
   <script setup>
   import { ref, onMounted } from 'vue'
   import UsuarioService from '../../services/userServices'
-  
+  import { jwtDecode } from 'jwt-decode'
   const usuarios = ref([])
-  
+    const userName = ref('')
+    const userRole = ref('')
   const cargarUsuarios = async () => {
-    const res = await UsuarioService.getAllUsuarios()
-    usuarios.value = res.data.content
+  try {
+    const response = await UsuarioService.getAllUsuarios(0, 10, 'id,asc');
+    usuarios.value = response.data.content;
+  } catch (error) {
+    console.error('Error al cargar los usuarios:', error);
+    if (error.response && error.response.status === 403) {
+      alert('No tienes permisos para acceder a esta funcionalidad.');
+    } else if (error.message === 'Network Error') {
+      alert('No se pudo conectar con el servidor. Verifica tu conexión o contacta al administrador.');
+    } else {
+      alert('Hubo un problema al cargar los usuarios. Por favor, intenta nuevamente más tarde.');
+    }
   }
+};
+  
   
   onMounted(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      const decoded = jwtDecode(token)
+      userName.value = decoded.name || decoded.username || 'USERNAME'
+      userRole.value = decoded.role || 'FARMACEUTICO'
+    }
     cargarUsuarios()
   })
   
