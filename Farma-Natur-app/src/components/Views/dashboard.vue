@@ -1,17 +1,4 @@
-<template>
-    <div class="dashboard-container">
-      <FarmaHeader
-      :userName="username" 
-      :userRole="userRole"  />
-      <div class="dashboard-content">
-        <h1>Dashboard</h1>
-        <p>Bienvenido al panel de control de Farma-Natur</p>
-        <p>Contenido del dashboard...</p>
-      </div>
-    </div>
-  </template>
-  
-  <script setup>
+<script setup>
   import { ref, onMounted } from 'vue'
   import { jwtDecode } from 'jwt-decode'
   import FarmaHeader from '../MicroComponents/Farmaceutico/FarmaHeader.vue'
@@ -24,11 +11,24 @@
     const token = localStorage.getItem('token')
     if (token) {
       const decoded = jwtDecode(token)
-      userName.value = decoded.name || decoded.username || 'Usuario'
-      userRole.value = decoded.role || 'Usuario'
+      userName.value = decoded.name || decoded.username || 'USERNAME'
+      userRole.value = decoded.role || 'FARMACEUTICO'
     }
   })
   </script>
+
+<template>
+    <div class="dashboard-container">
+      <FarmaHeader
+      :userName="userName" 
+      :userRole="userRole"  />
+      <div class="dashboard-content">
+        <h1>Dashboard</h1>
+        <p>Bienvenido al panel de control de Farma-Natur</p>
+        <p>Contenido del dashboard...</p>
+      </div>
+    </div>
+  </template>
   
   
   <style>

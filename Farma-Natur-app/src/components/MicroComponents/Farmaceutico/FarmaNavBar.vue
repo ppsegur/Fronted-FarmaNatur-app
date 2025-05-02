@@ -81,6 +81,8 @@ const closeNavBar = () => {
         <div class="user-info">
           <i class="pi pi-user-circle user-icon"></i>
           <div>
+            <!-- Aquí se muestra el nombre de usuario del usuario logueado -->
+
             <p class="user-name">{{ userName }}</p>
             <p class="user-role">{{ userRole }}</p>
           </div>
@@ -99,16 +101,16 @@ const closeNavBar = () => {
 
 
 
+
 <style scoped>
 .navbar-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
-  z-index: 999;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  justify-content: flex-start;
   animation: fadeIn 0.3s ease;
 }
 
@@ -118,17 +120,15 @@ const closeNavBar = () => {
 }
 
 .navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 280px;
   height: 100%;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9f5f1 100%);
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
-  z-index: 1000;
+  background: linear-gradient(160deg, #ffffff 0%, #e6f4ea 100%);
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   animation: slideIn 0.3s ease;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
 }
 
 @keyframes slideIn {
@@ -137,11 +137,11 @@ const closeNavBar = () => {
 }
 
 .navbar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
 }
 
 .logo-container {
@@ -151,133 +151,128 @@ const closeNavBar = () => {
 }
 
 .logo-icon {
-  font-size: 1.8rem;
-  color: #2e7d32;
+  font-size: 24px;
+  color: #43a047;
 }
 
 .logo-text {
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-size: 1.4rem;
+  font-weight: bold;
   color: #2e7d32;
 }
 
 .close-button {
   background: none;
   border: none;
-  font-size: 1.5rem;
-  color: #666;
+  font-size: 20px;
+  color: #888;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: 0.3s;
 }
 
 .close-button:hover {
-  color: #d32f2f;
+  color: #e53935;
   transform: rotate(90deg);
 }
 
 .nav-links {
-  padding: 20px;
   flex: 1;
-  overflow-y: auto;
+  padding: 20px;
 }
 
 .nav-link {
   display: flex;
   align-items: center;
-  padding: 12px 15px;
-  border-radius: 8px;
-  color: #333;
+  padding: 12px;
+  border-radius: 10px;
   text-decoration: none;
-  transition: all 0.3s ease;
-  margin-bottom: 5px;
+  color: #333;
+  font-weight: 500;
+  margin-bottom: 10px;
+  transition: all 0.2s ease;
 }
 
 .nav-link:hover {
-  background-color: rgba(46, 125, 50, 0.1);
+  background-color: #d0e8d0;
   transform: translateX(5px);
 }
 
-.nav-link.router-link-active {
-  background-color: #2e7d32;
-  color: white;
-}
-
-.nav-link.router-link-active .nav-icon,
-.nav-link.router-link-active .arrow-icon {
-  color: white;
-}
-
 .nav-icon {
+  margin-right: 12px;
   font-size: 1.2rem;
-  color: #2e7d32;
-  margin-right: 15px;
-  width: 24px;
-  text-align: center;
+  color: #388e3c;
 }
 
 .nav-text {
-  flex: 1;
-  font-size: 1rem;
-  font-weight: 500;
+  flex-grow: 1;
 }
 
 .arrow-icon {
   font-size: 0.9rem;
-  color: #666;
-  transition: all 0.3s ease;
+  color: #999;
 }
 
-.nav-link:hover .arrow-icon {
-  transform: translateX(3px);
-  color: #2e7d32;
+.router-link-active {
+  background-color: #388e3c;
+  color: white;
+}
+
+.router-link-active .nav-icon,
+.router-link-active .arrow-icon {
+  color: white;
 }
 
 .nav-footer {
   padding: 20px;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #ccc;
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
 .user-icon {
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: #2e7d32;
 }
 
 .user-name {
   font-weight: 600;
-  margin: 0;
+  font-size: 1rem;
   color: #333;
+  margin: 0;
 }
 
 .user-role {
-  font-size: 0.8rem;
-  color: #666;
+  font-size: 0.85rem;
+  color: #777;
   margin: 0;
+}
+
+/* Añade margen superior al botón de logout para separarlo del user-info */
+.logout-btn {
+  margin-top: -30px;
 }
 
 .logout-btn {
   width: 100%;
-  padding: 10px;
-  background: none;
-  border: 1px solid #d32f2f;
-  color: #d32f2f;
+  background-color: #e53935;
+  color: white;
+  border: none;
   border-radius: 6px;
   cursor: pointer;
+  font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .logout-btn:hover {
-  background-color: #d32f2f;
-  color: white;
+  background-color: #c62828;
 }
 </style>
