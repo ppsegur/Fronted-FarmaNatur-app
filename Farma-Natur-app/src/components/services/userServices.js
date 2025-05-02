@@ -4,7 +4,6 @@ import { jwtDecode } from 'jwt-decode';
 const API_URL = 'http://localhost:8080';
 
 
-
 // Función para obtener el rol del usuario actual
 const getUserRole = () => {
   const token = localStorage.getItem('token');
@@ -81,21 +80,7 @@ const getAllUsuarios = async (page = 0, size = 10, sort = 'id,asc') => {
     });
   };
 
-const getUsuarioActual = () => {
-  const token = localStorage.getItem('token');
-  
-  if (!token) {
-    console.error('No hay token disponible');
-    window.location.href = '/login';
-    return Promise.reject(new Error('No hay token disponible'));
-  }
-  
-  return axios.get(`${API_URL}/me`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    },
-  });
-};
+
 
 const deleteUsuario = (username) => {
   const token = localStorage.getItem('token');
@@ -189,8 +174,8 @@ const getUsuariosByRole = (role, page = 0, size = 10) => {
 // Exportar todas las funciones correctamente
 const userServices = {
   getAllUsuarios,
-  getUsuarioActual, 
-  
+
+
    deleteUsuario,
   editUsuario,
   getUserRole,

@@ -39,8 +39,8 @@
   <script setup>
   import { ref, onMounted, computed } from 'vue'
   import { useRouter } from 'vue-router'
-  import UsuarioService from '../../services/userServices'
   import {jwtDecode} from 'jwt-decode'
+  import UsuarioService from '../../services/userServices';
   const router = useRouter()
   const usuarios = ref([])
   const loading = ref(false)
@@ -74,9 +74,25 @@
     loading.value = false;
   }
 };
-  onMounted(cargarUsuarios)
   
   // ──────────────────────────────── acciones tabla ─────
+
+    const userName = ref('')
+    const userRole = ref('')
+
+  
+  
+  onMounted(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      const decoded = jwtDecode(token)
+      userName.value = decoded.name || decoded.username || 'USERNAME'
+      userRole.value = decoded.role || 'FARMACEUTICO'
+    }
+    cargarUsuarios()
+  })
+  
+
   const guardarCambios = async (user) => {
     if (!isAdmin.value) return alert('Permiso denegado')
   
