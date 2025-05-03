@@ -4,31 +4,8 @@ import { jwtDecode } from 'jwt-decode';
 const API_URL = 'http://localhost:8080';
 
 
-// Función para obtener el rol del usuario actual
-const getUserRole = () => {
-  const token = localStorage.getItem('token');
-  if (!token) return null;
-  
-  try {
-    const decoded = jwtDecode(token);
-    return decoded.role;
-  } catch (error) {
-    console.error('Error al obtener el rol:', error);
-    return null;
-  }
-};
 
 // Verificar si el usuario tiene un rol específico o alguno de una lista de roles
-const hasRole = (requiredRoles) => {
-  const userRole = getUserRole();
-  if (!userRole) return false;
-  
-  if (Array.isArray(requiredRoles)) {
-    return requiredRoles.includes(userRole);
-  }
-  
-  return userRole === requiredRoles;
-};
 
 // Decodifica el token si está presente
 const token = localStorage.getItem('token');
@@ -36,6 +13,8 @@ if (token) {
   try {
     const decoded = jwtDecode(token);
     console.log(decoded);
+    console.log('Token decodificado:', decoded)
+
     
     if (!decoded.verified) {
       console.error('El usuario no está verificado.');
@@ -56,29 +35,30 @@ if (token) {
 }
 
 // Métodos del servicio
-const getAllUsuarios = async (page = 0, size = 10, sort = 'id,asc') => {
-    const token = localStorage.getItem('token');
-    
-    if (!token) {
-      console.error('No hay token disponible');
-      window.location.href = '/login';
-      return Promise.reject(new Error('No hay token disponible'));
-    }
-    
-    return axios.get(`${API_URL}/auth/todos`, {
-      params: { page, size, sort },
-      withCredentials: true,
+
+export const getAllUsuarios = async () => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    throw new Error('No hay token disponible');
+  }
+
+  try {
+    const response = await axios.get(`${API_URL}/auth/todos`, {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
+        "Content-Type" : "application/json",
+         
       },
-    }).catch(error => {
-      if (error.response && error.response.status === 403) {
-        console.error('No tienes permisos para acceder a esta información');
-        return Promise.reject(new Error('No tienes permisos para acceder a esta información'));
-      }
-      return Promise.reject(error);
     });
-  };
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 403) {
+      throw new Error('No tienes permisos para acceder a esta información');
+    }
+    throw error;
+  }
+};
+
 
 
 
@@ -174,12 +154,9 @@ const getUsuariosByRole = (role, page = 0, size = 10) => {
 // Exportar todas las funciones correctamente
 const userServices = {
   getAllUsuarios,
-
-
    deleteUsuario,
   editUsuario,
-  getUserRole,
-  hasRole,
+
   getUsuariosByRole,
   getUsuarioById,
     getUsuarioCompleto,

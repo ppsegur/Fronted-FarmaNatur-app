@@ -8,7 +8,7 @@ const props = defineProps({
   },
   userRole: {
     type: String,
-    default: 'Farmacéutico', // Valor predeterminado
+    default: 'Farmacéutico', 
   },
 });
 
