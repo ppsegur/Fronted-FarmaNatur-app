@@ -21,7 +21,7 @@ const routes = [
     path: '/dashboard',
     component: DashboardView,
     meta: { requiresAuth: true , 
-      role: 'FARMACEUTICO' }, // Solo accesible para farmaceuticos
+      role: 'ROLE_ADMIN' }, // Solo accesible para farmaceuticos
     
   },
     {
@@ -36,7 +36,7 @@ const routes = [
     {
       path:'/usuarios',
       component: UserDashBoard,
-      meta: { requiresAuth: true, role: 'FARMACEUTICO' } 
+      meta: { requiresAuth: true,   role: 'ROLE_ADMIN' } 
     }
  
 ]

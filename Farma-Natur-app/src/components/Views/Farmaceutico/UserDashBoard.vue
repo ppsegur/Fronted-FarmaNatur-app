@@ -14,7 +14,7 @@
     <th>Username</th>
     <th>Email</th>
     <th>Rol</th>
-    <th v-if="isAdmin || isFarmaceutico">Acciones</th>
+    <th>Acciones</th>
   </tr>
 </thead>
 <tbody>
@@ -45,30 +45,45 @@
   const usuarios = ref([])
   const loading = ref(false)
   const error = ref(null)
-  
-  // ───────────────────────────────────────── roles ─────
-  const isAdmin = computed(() => UsuarioService.getUserRole() === 'ADMIN')
-  const isFarmaceutico = computed(
-    () => UsuarioService.getUserRole() === 'FARMACEUTICO'
-  )
-  
+
+  const userName = ref('')
+  const userRole = ref('ADMIN')
+  onMounted(() => {
+  const token = localStorage.getItem('token')
+  if (token) {
+    const decoded = jwtDecode(token)
+    userName.value = decoded.name || decoded.username || 'USERNAME'
+    userRole.value = decoded.role || 'ROLE_FADMIN'
+    console.log('Token decodificado:', decoded)
+
+    cargarUsuarios()
+  }
+})
+
+
   // ─────────────────────────────────── cargar usuarios ─
-    const cargarUsuarios = async () => {
+  const cargarUsuarios = async ( ) => {
   loading.value = true;
   error.value = null;
 
   try {
-    if (isFarmaceutico.value) {
-      // Usar datos del token directamente
+    // Cargar todos los usuarios si el rol es ADMIN o FARMACEUTICO
+   {
       const res = await UsuarioService.getAllUsuarios();
-      usuarios.value = [res.data];
-    } else {
-  
       usuarios.value = res.data.content || [];
+      console.log(usuarios.value)
+   
+      // Cargar solo los datos del usuario actual
+     // const res = await UsuarioService.getUsuarioActual();
+     // usuarios.value = [res.data];
     }
   } catch (err) {
     console.error('Error al cargar usuarios:', err);
-    error.value = err.message || 'Error al cargar información de usuarios';
+    if (err.response && err.response.status === 403) {
+      error.value = 'No tienes permisos para acceder a esta información.';
+    } else {
+      error.value = 'Error al cargar información de usuarios.';
+    }
     usuarios.value = [];
   } finally {
     loading.value = false;
@@ -76,21 +91,9 @@
 };
   
   // ──────────────────────────────── acciones tabla ─────
-
-    const userName = ref('')
-    const userRole = ref('')
-
   
   
-  onMounted(() => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      const decoded = jwtDecode(token)
-      userName.value = decoded.name || decoded.username || 'USERNAME'
-      userRole.value = decoded.role || 'FARMACEUTICO'
-    }
-    cargarUsuarios()
-  })
+
   
 
   const guardarCambios = async (user) => {
