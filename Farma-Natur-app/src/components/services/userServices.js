@@ -38,6 +38,7 @@ if (token) {
 
 export const getAllUsuarios = async () => {
   const token = localStorage.getItem('token');
+
   if (!token) {
     throw new Error('No hay token disponible');
   }
@@ -46,6 +47,10 @@ export const getAllUsuarios = async () => {
     const response = await axios.get(`${API_URL}/auth/todos`, {
       headers: {
         Authorization: `Bearer ${token}`,
+        "Accept" : "application/json",
+        "Access-Control-Allow-Origin" : "*",
+        "Access-Control-Allow-Methods" : "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers" : "Content-Type, Authorization",
         "Content-Type" : "application/json",
          
       },
@@ -132,32 +137,13 @@ const getUsuarioById = async (userId) => {
       return Promise.reject(error);
     }
   };
-// Función para obtener usuarios según el rol (si el backend lo soporta)
-const getUsuariosByRole = (role, page = 0, size = 10) => {
-  const token = localStorage.getItem('token');
-  
-  if (!token) {
-    console.error('No hay token disponible');
-    window.location.href = '/login';
-    return Promise.reject(new Error('No hay token disponible'));
-  }
-  
-  // Ajusta esta URL según la API de tu backend
-  return axios.get(`${API_URL}/auth/byRole/${role}`, {
-    params: { page, size },
-    headers: {
-      Authorization: `Bearer ${token}`
-    },
-  });
-};
+
 
 // Exportar todas las funciones correctamente
 const userServices = {
   getAllUsuarios,
    deleteUsuario,
   editUsuario,
-
-  getUsuariosByRole,
   getUsuarioById,
     getUsuarioCompleto,
 };
