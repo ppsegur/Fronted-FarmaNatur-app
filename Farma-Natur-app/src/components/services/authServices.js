@@ -10,6 +10,7 @@ const login = async (credentials) => {
   localStorage.setItem('token', token)
   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
   const decoded = jwtDecode(token)
+  console.log('Decoded token:', decoded) // Verifica el contenido del token decodificado
   return decoded
 }
 
