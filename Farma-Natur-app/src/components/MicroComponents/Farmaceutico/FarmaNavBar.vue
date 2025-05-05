@@ -261,7 +261,7 @@ const closeNavBar = () => {
 
 /* Añade margen superior al botón de logout para separarlo del user-info */
 .logout-btn {
-  margin-top: -30px;
+  margin-top: -100px;
 }
 
 .logout-btn {
