@@ -11,6 +11,7 @@
 </template>
 
 <style scoped>
+@import "tailwindcss";
 * {
   margin: 0;
   padding: 0;
@@ -26,6 +27,7 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+  overflow-y: auto;
  /* min-width: 1280px;*/
 }
 

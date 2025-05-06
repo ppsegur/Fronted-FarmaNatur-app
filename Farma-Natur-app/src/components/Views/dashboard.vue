@@ -37,13 +37,12 @@
     flex-direction: column;
     height: 100vh; /* Full height of the viewport */
     background-color: #f0f0f0; /* Light gray background */
-    overflow: hidden;
+    overflow-y: auto;
   }
   
   .dashboard-content {
     margin-top: 60px; /* Altura del header */
     padding: 20px;
     flex: 1;
-    overflow-y: auto;
   }
   </style>
