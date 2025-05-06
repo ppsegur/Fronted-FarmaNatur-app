@@ -74,47 +74,17 @@
           </div>
         </div>
       </Teleport>
-  
-      <!-- Modal Eliminar -->
-      <Teleport to="body">
-        <div
-          v-if="modalEliminarVisible"
-          class="fixed inset-0 z-50 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center"
-        >
-          <div
-            class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm transform transition-transform duration-300 scale-100"
-          >
-            <h2 class="text-xl font-semibold mb-4 text-red-700">Eliminar Categoría</h2>
-            <p class="mb-6 text-gray-700">¿Estás seguro de que deseas eliminar la categoría con ID: {{ categoriaAEliminarId }}?</p>
-            <div class="flex justify-end">
-              <button
-                type="button"
-                class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 mr-2 transition-colors"
-                @click="cerrarModalEliminar"
-              >
-                Cancelar
-              </button>
-              <button
-                type="button"
-                class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
-                @click="confirmarEliminarCategoria"
-              >
-                Eliminar
-              </button>
-            </div>
-          </div>
-        </div>
-      </Teleport>
     </div>
   </template>
   
   <script setup>
   import { onMounted, ref } from 'vue';
-  import { getCategorias } from '../services/categoriaServices.js';
+  import { getCategorias, editCategoria } from '../services/categoriaServices.js';
   
   const categorias = ref([]);
   const modalEditarVisible = ref(false);
   const modalEliminarVisible = ref(false);
+  const categoriaSeleccionada = ref('');
   const categoriaAEditar = ref({ id: null, nombre: '' });
   const categoriaAEliminarId = ref(null);
   
@@ -131,25 +101,30 @@
   };
   
   const abrirModalEditar = (categoria) => {
-    categoriaAEditar.value = { ...categoria };
-    modalEditarVisible.value = true;
-    modalEliminarVisible.value = false;
-  };
+  categoriaSeleccionada.value = categoria.nombre; // Guarda el nombre actual
+  categoriaAEditar.value = { nombre: categoria.nombre }; // Inicializa el nuevo nombre con el actual
+  modalEditarVisible.value = true;
+  modalEliminarVisible.value = false;
+};
+const cerrarModalEditar = () => {
+  modalEditarVisible.value = false;
+  categoriaSeleccionada.value = '';
+  categoriaAEditar.value = { nombre: '' };
+};
   
-  const cerrarModalEditar = () => {
-    modalEditarVisible.value = false;
-    categoriaAEditar.value = { id: null, nombre: '' };
-  };
-  
-  const guardarEdicionCategoria = async () => {
-    try {
-      await updateCategoria(categoriaAEditar.value.id, { nombre: categoriaAEditar.value.nombre });
-      await cargarCategorias();
-      cerrarModalEditar();
-    } catch (error) {
+const guardarEdicionCategoria = async () => {
+  try {
+    await editCategoria(categoriaSeleccionada.value, { nombre: categoriaAEditar.value.nombre });
+    await cargarCategorias();
+    cerrarModalEditar();
+  } catch (error) {
+    if (error.response) {
+      console.error("Error del backend:", error.response.data);
+    } else {
       console.error("Error al actualizar la categoría:", error);
     }
-  };
+  }
+};
   
   const abrirModalEliminar = (id) => {
     categoriaAEliminarId.value = id;
