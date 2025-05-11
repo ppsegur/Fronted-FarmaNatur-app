@@ -90,14 +90,19 @@
           <h2 class="text-xl font-semibold mb-4 text-blue-700">Editar Categoría</h2>
           <form @submit.prevent="guardarEdicionCategoria">
             <div class="mb-4">
-              <label for="nombre" class="block text-sm font-medium text-gray-700 mb-1">Nombre:</label>
-              <input
-                id="nombre"
-                type="text"
-                v-model="categoriaAEditar.nombre"
-                class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
-              />
-            </div>
+              <div class="input-container">
+  <input
+    id="nombre"
+    type="text"
+    v-model="categoriaAEditar.nombre"
+    class="input"
+    placeholder=" "
+  />
+  <label for="nombre" class="label">Nombre</label>
+  <div class="topline"></div>
+  <div class="underline"></div>
+  </div>
+</div>
             <div class="flex justify-end mt-6">
               <button
                 type="button"
@@ -251,4 +256,81 @@ tr:hover {
   border-radius: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.655);
 }
+/* Contenedor del input */
+.input-container {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+/* Estilo del input */
+.input {
+  padding: 10px;
+  height: 40px;
+  width: 100%;
+  border: 2px solid #0B2447;
+  border-top: none;
+  border-bottom: none;
+  font-size: 16px;
+  background: transparent;
+  outline: none;
+  box-shadow: 7px 7px 0px 0px #0B2447;
+  transition: all 0.5s;
+}
+
+.input:focus {
+  box-shadow: none;
+  transition: all 0.5s;
+}
+
+/* Estilo del label */
+.label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #0B2447;
+  font-size: 14px;
+  transition: all 0.5s;
+  transform: scale(0);
+  z-index: -1;
+}
+
+/* Línea superior animada */
+.input-container .topline {
+  position: absolute;
+  background-color: #0B2447;
+  width: 0%;
+  height: 2px;
+  right: 0;
+  top: 0;
+  transition: all 0.5s;
+}
+
+.input-container input[type="text"]:focus ~ .topline {
+  width: 35%;
+  transition: all 0.5s;
+}
+
+/* Línea inferior animada */
+.input-container .underline {
+  position: absolute;
+  background-color: #0B2447;
+  width: 0%;
+  height: 2px;
+  right: 0;
+  bottom: 0;
+  transition: all 0.5s;
+}
+
+.input-container input[type="text"]:focus ~ .underline {
+  width: 100%;
+  transition: all 0.5s;
+}
+
+/* Animación del label al enfocar */
+.input-container input[type="text"]:focus ~ .label {
+  top: -10px;
+  transform: scale(1);
+  transition: all 0.5s;
+}
+
 </style>

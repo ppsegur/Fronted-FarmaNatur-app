@@ -10,21 +10,22 @@ export const getCategorias = async () => {
 };
 
 //Función para editar una categoría por nombre
-export const editCategoria = async ( nombre, data) => {
+export const editCategoria = async (nombre, data) => {
     const token = localStorage.getItem('token');
-    
+  
     if (!token) {
-        console.error('No hay token disponible');
-        window.location.href = '/login';
-        return Promise.reject(new Error('No hay token disponible'));
+      console.error('No hay token disponible');
+      window.location.href = '/login';
+      return Promise.reject(new Error('No hay token disponible'));
     }
-    
+  
     return axios.put(`${API_URL}/${encodeURIComponent(nombre)}`, data, {
-        headers: {
-        Authorization: `Bearer ${token}`
-        },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
     });
-    }
+  };
 
 //Función para eliminar una categoría por nombre
 export const deleteCategoria = async (nombre) => {
