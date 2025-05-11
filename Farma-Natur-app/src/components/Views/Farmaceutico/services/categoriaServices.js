@@ -25,3 +25,20 @@ export const editCategoria = async ( nombre, data) => {
         },
     });
     }
+
+//Función para eliminar una categoría por nombre
+export const deleteCategoria = async (nombre) => {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+        console.error('No hay token disponible');
+        window.location.href = '/login';
+        return Promise.reject(new Error('No hay token disponible'));
+    }
+    
+    return axios.delete(`${API_URL}/${encodeURIComponent(nombre)}`, {
+        headers: {
+        Authorization: `Bearer ${token}`
+        },
+    });
+}

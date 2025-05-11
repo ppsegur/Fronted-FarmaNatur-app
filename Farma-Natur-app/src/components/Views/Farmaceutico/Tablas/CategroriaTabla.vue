@@ -18,6 +18,9 @@
             <td class="border border-gray-300 px-4 py-2">{{ categoria.id }}</td>
             <td class="border border-gray-300 px-4 py-2">{{ categoria.nombre }}</td>
             <td class="border border-gray-300 px-4 py-2">
+
+              
+              <!-- Modal de eliminar -->
               <button
                 class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors"
                 @click="abrirModalEditar(categoria)"
@@ -26,15 +29,47 @@
               </button>
               <button
                 class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors ml-2"
-                @click="abrirModalEliminar(categoria.id)"
-              >
-                Eliminar
-              </button>
+                 @click="abrirModalEliminar(categoria)"
+              >    
+               Eliminar
+            </button>
             </td>
           </tr>
         </tbody>
       </table>
-  
+          <!-- Modal de eliminar -->
+      <Teleport to="body">
+  <div
+    v-if="modalEliminarVisible"
+    class="fixed inset-0 z-50 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center"
+  >
+    <div
+      class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm transform transition-transform duration-300 scale-100"
+    >
+      <h2 class="text-xl font-semibold mb-4 text-red-700">Eliminar Categoría</h2>
+      <p class="mb-6 text-gray-700">
+        ¿Estás seguro de que deseas eliminar la categoría <strong>{{ categoriaAEliminarNombre }}</strong>?
+      </p>
+      <div class="flex justify-end">
+        <button
+          type="button"
+          class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 mr-2 transition-colors"
+          @click="cerrarModalEliminar"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
+          @click="confirmarEliminarCategoria"
+        >
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+</Teleport>
+
       <!-- Modal Editar -->
       <Teleport to="body">
         <div
@@ -79,15 +114,17 @@
   
   <script setup>
   import { onMounted, ref } from 'vue';
-  import { getCategorias, editCategoria } from '../services/categoriaServices.js';
+  import { getCategorias, editCategoria, deleteCategoria } from '../services/categoriaServices.js';
   
   const categorias = ref([]);
   const modalEditarVisible = ref(false);
   const modalEliminarVisible = ref(false);
   const categoriaSeleccionada = ref('');
   const categoriaAEditar = ref({ id: null, nombre: '' });
-  const categoriaAEliminarId = ref(null);
-  
+  const categoriaAEliminarNombre = ref('');
+
+
+
   onMounted(async () => {
     await cargarCategorias();
   });
@@ -126,20 +163,20 @@ const guardarEdicionCategoria = async () => {
   }
 };
   
-  const abrirModalEliminar = (id) => {
-    categoriaAEliminarId.value = id;
-    modalEliminarVisible.value = true;
-    modalEditarVisible.value = false;
-  };
-  
-  const cerrarModalEliminar = () => {
-    modalEliminarVisible.value = false;
-    categoriaAEliminarId.value = null;
-  };
+const abrirModalEliminar = (categoria) => {
+  categoriaAEliminarNombre.value = categoria.nombre;
+  modalEliminarVisible.value = true;
+  modalEditarVisible.value = false;
+};
+
+const cerrarModalEliminar = () => {
+  modalEliminarVisible.value = false;
+  categoriaAEliminarNombre.value = '';
+};
   
   const confirmarEliminarCategoria = async () => {
     try {
-      await deleteCategoria(categoriaAEliminarId.value);
+      await deleteCategoria(categoriaAEliminarNombre.value);
       await cargarCategorias();
       cerrarModalEliminar();
     } catch (error) {
@@ -151,7 +188,7 @@ const guardarEdicionCategoria = async () => {
   
   
   <style scoped>
-  /* Estilos para la tabla (sin cambios) */
+  /* Estilos para la tabla */
   .table-auto {
     border-spacing: 0;
   }
