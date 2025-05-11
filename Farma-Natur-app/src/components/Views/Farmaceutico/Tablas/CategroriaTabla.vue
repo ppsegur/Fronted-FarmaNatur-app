@@ -60,25 +60,25 @@
   />
 </div>
     <h2 class="text-xl font-semibold mb-4 text-red-700">Eliminar Categoría</h2>
-    <p class="mb-6 text-gray-700">
+    <p class="mb-7 text-black-700">
       ¿Estás seguro de que deseas eliminar la categoría <strong>{{ categoriaAEliminarNombre }}</strong>?
     </p>
-    <div class="flex justify-end">
-      <button
-        type="button"
-        class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 mr-2 transition-colors"
-        @click="cerrarModalEliminar"
-      >
-        Cancelar
-      </button>
-      <button
-        type="button"
-        class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors"
-        @click="confirmarEliminarCategoria"
-      >
-        Eliminar
-      </button>
-    </div>
+    <div class="flex justify-center gap-4 mt-6">
+  <button
+    type="button"
+    class="custom-button bg-gray-200 text-gray-700 mr-2"
+    @click="cerrarModalEliminar"
+  >
+    <span>Cancelar</span>
+  </button>
+  <button
+    type="button"
+    class="custom-button bg-red-500 text-white"
+    @click="confirmarEliminarCategoria"
+  >
+    <span>Eliminar</span>
+  </button>
+</div>
   </div>
 </div>
 </Teleport>
@@ -108,21 +108,22 @@
   <div class="underline"></div>
   </div>
 </div>
-            <div class="flex justify-end mt-6">
-              <button
-                type="button"
-                class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 mr-2 transition-colors"
-                @click="cerrarModalEditar"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
-              >
-                Guardar Cambios
-              </button>
-            </div>
+<div class="flex justify-center gap-4 mt-6">
+  <button
+    type="button"
+    class="custom-button bg-gray-200 text-gray-700"
+    @click="cerrarModalEditar"
+  >
+    <span>Cancelar</span>
+  </button>
+  <button
+    type="submit"
+    class="custom-button bg-blue-500 text-white flex items-center justify-center"
+    @click="guardarEdicionCategoria"
+  >
+    <span>Guardar Cambios</span>
+  </button>
+</div>
           </form>
         </div>
       </div>
@@ -260,14 +261,32 @@ tr:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #d4f4dd;
+  background: repeating-linear-gradient(45deg, #92c9b1, #92c9b1 20px, #b3e0d2 20px, #b3e0d2 40px);
   z-index: 1000;
-  width: 450px;
+  width: 500px;
   height: 300px;
   margin-left: 350px;
   margin-top: 200px;
   border-radius: 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.655);
+}
+/* Estilo para centrar y bajar los botones */
+.flex {
+  justify-content: center;
+  gap: 16px; /* Espaciado entre botones */
+}
+
+.mt-6 {
+  margin-top: 24px; /* Bajar los botones */
+}
+
+
+
+.modal-text {
+  font-size: 1rem;
+  font-weight: bold; /* Letras más fuertes */
+  color: #4a5568; /* Gris oscuro */
+  margin-bottom: 24px;
 }
 /* Contenedor del input */
 .input-container {
@@ -344,6 +363,63 @@ tr:hover {
   top: -10px;
   transform: scale(1);
   transition: all 0.5s;
+}
+/*Estilos para los botones de los mosales */
+.custom-button {
+  outline: none;
+  cursor: pointer;
+  border: none;
+  padding: 0.9rem 2rem;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  position: relative;
+  display: inline-block;
+  letter-spacing: 0.05rem;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  font-weight: 500;
+  font-size: 14px;
+  border-radius: 500px;
+  overflow: hidden;
+  align-items: center;
+  background: #66ff66;
+  color: ghostwhite;
+  transition: all 0.4s ease;
+}
+
+.custom-button span {
+  position: relative;
+  z-index: 50;
+  transition: color 0.4s;
+}
+
+
+.custom-button:hover span {
+  color: black;
+}
+
+.custom-button::before,
+.custom-button::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.custom-button::before {
+  content: "";
+  background: #000;
+  width: 120%;
+  left: -10%;
+  transform: skew(30deg);
+  transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+}
+
+.custom-button:hover::before {
+  transform: translate3d(100%, 0, 0);
 }
 
 </style>
