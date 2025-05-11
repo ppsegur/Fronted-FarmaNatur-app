@@ -17,22 +17,27 @@
         >
           <td class="border border-gray-300 px-4 py-2">{{ categoria.id }}</td>
           <td class="border border-gray-300 px-4 py-2">{{ categoria.nombre }}</td>
-          <td class="border border-gray-300 px-4 py-2">
+          <td class="border border-gray-300 px-4 py-2 flex justify-center gap-2 ">
 
             
-            <!-- Modal de eliminar -->
-            <button
-              class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition-colors"
+            <IconButton
+              tooltip="Editar"
+              color="blue"
               @click="abrirModalEditar(categoria)"
             >
-              Editar
-            </button>
-            <button
-              class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors ml-2"
-               @click="abrirModalEliminar(categoria)"
-            >    
-             Eliminar
-          </button>
+              <path
+                d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+              />
+            </IconButton>
+            <IconButton
+              tooltip="Eliminar"
+              color="red"
+              @click="abrirModalEliminar(categoria)"
+            >
+              <path
+                d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z"
+              />
+            </IconButton>
           </td>
         </tr>
       </tbody>
@@ -126,6 +131,7 @@
 </template>
 
 <script setup>
+import IconButton from '../botones/IconButton.vue';
 import { onMounted, ref, watch } from 'vue';
 import { getCategorias, editCategoria, deleteCategoria } from '../services/categoriaServices.js';
 
@@ -225,6 +231,13 @@ tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
+td.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  gap: 8px;
+}
 tr:hover {
   background-color: #d4f4dd;
 }
