@@ -73,7 +73,7 @@
   </button>
   <button
     type="button"
-    class="custom-button bg-red-500 text-white"
+    class="custom-button-delete bg-red-500 text-white"
     @click="confirmarEliminarCategoria"
   >
     <span>Eliminar</span>
@@ -92,7 +92,8 @@
         <div
           class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md transform transition-transform duration-300 scale-100"
         >
-          <h2 class="text-xl font-semibold mb-4 text-blue-700">Editar Categoría</h2>
+          <h2 class="text-xl font-semibold mb-4 text-black-700"> Editar Categoría</h2>
+          <br>
           <form @submit.prevent="guardarEdicionCategoria">
             <div class="mb-4">
               <div class="input-container">
@@ -261,7 +262,7 @@ tr:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: repeating-linear-gradient(45deg, #92c9b1, #92c9b1 20px, #b3e0d2 20px, #b3e0d2 40px);
+  background-color: #aef4ae;
   z-index: 1000;
   width: 500px;
   height: 300px;
@@ -283,6 +284,7 @@ tr:hover {
 
 
 .modal-text {
+  gap: 4px;
   font-size: 1rem;
   font-weight: bold; /* Letras más fuertes */
   color: #4a5568; /* Gris oscuro */
@@ -419,6 +421,65 @@ tr:hover {
 }
 
 .custom-button:hover::before {
+  transform: translate3d(100%, 0, 0);
+}
+
+/**Estilos botones de eliminar  */
+.custom-button-delete {
+  outline: none;
+  cursor: pointer;
+  border: none;
+  padding: 0.9rem 2rem;
+  margin: 0;
+  font-family: inherit;
+  font-size: inherit;
+  position: relative;
+  display: inline-block;
+  letter-spacing: 0.05rem;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente */
+  font-weight: 500;
+  font-size: 14px;
+  border-radius: 500px;
+  overflow: hidden;
+  align-items: center;
+  background: #ff0000;
+  color: ghostwhite;
+  transition: all 0.4s ease;
+}
+
+.custom-button-delete span {
+  position: relative;
+  z-index: 50;
+  transition: color 0.4s;
+}
+
+
+.custom-button-delete:hover span {
+  color: black;
+}
+
+.custom-button-delete::before,
+.custom-button-delete::after {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.custom-button-delete::before {
+  content: "";
+  background: #000000;
+  width: 120%;
+  color:white;
+  left: -10%;
+  transform: skew(30deg);
+  transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
+}
+
+.custom-button-delete:hover::before {
   transform: translate3d(100%, 0, 0);
 }
 

@@ -24,15 +24,14 @@ onMounted(() => {
     <div class="dashboard-container">
       <br>
       <h1 class="dashboard-title">Gestión de Categorías</h1>
-    
-      <CategoriaCardMas
-      style="margin-left: 20px;" />
-      <br>
-      <div class="table-container">
-        <br>
-        
-        <CategroriaTabla />
-      </div>
+      <hr style="width: 100%; border: none; border-top: 2px solid #e5e7eb; margin: 20px 0;" />
+
+    <div class="categoria-layout">
+  <CategoriaCardMas class="categoria-card-mas" />
+  <div class="table-container">
+    <CategroriaTabla />
+  </div>
+</div>
     </div>
   </template>
   
@@ -46,8 +45,18 @@ onMounted(() => {
   height: 100% !important;
   background-color: #f3f4f6; 
   padding: 0;
-  width: 100% !important;
+  width: 100% ;
 }
+.categoria-layout {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+
+  flex-wrap: wrap; /* opcional: para que se adapten en pantallas pequeñas */
+}
+
+
 
 /* Estilo para el título */
 .dashboard-title {
