@@ -55,7 +55,7 @@
     text-align: center;
   }
   .icon {
-    margin-left: 45%;
+  
   width: 30px;
   height: 30px; 
   border-radius: 8px;

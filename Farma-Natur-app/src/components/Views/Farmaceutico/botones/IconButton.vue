@@ -1,4 +1,5 @@
 <template>
+  
     <label class="key key-hoverable" :class="buttonClass">
       <input type="checkbox" class="key-checkbox" />
       <div class="key-top">

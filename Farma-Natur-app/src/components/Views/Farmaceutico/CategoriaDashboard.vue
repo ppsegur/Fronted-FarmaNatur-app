@@ -6,6 +6,7 @@ import { jwtDecode } from 'jwt-decode';
 import FarmaHeader from '@/components/MicroComponents/Farmaceutico/FarmaHeader.vue';
 import CategroriaTabla from './Categorias/CategroriaTabla.vue';
 import CategoriaCardMas from './Categorias/CategoriaCardMas.vue';
+import CategoriaMessage from './messages/CategoriaMessage.vue';
 const userName = ref('');
 const userRole = ref('');
 
@@ -21,9 +22,13 @@ onMounted(() => {
 
 <template>
     <FarmaHeader :userName="userName" :userRole="userRole" />
+  
     <div class="dashboard-container">
       <br>
+      <br>
       <h1 class="dashboard-title">Gestión de Categorías</h1>
+      <CategoriaMessage />
+
       <hr style="width: 100%; border: none; border-top: 2px solid #e5e7eb; margin: 20px 0;" />
 
     <div class="categoria-layout">
@@ -45,6 +50,7 @@ onMounted(() => {
   height: 100% !important;
   background-color: #f3f4f6; 
   padding: 0;
+  margin-top: 10px;
   width: 100% ;
 }
 .categoria-layout {
@@ -72,12 +78,14 @@ onMounted(() => {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
   border-radius: 8px; 
   padding: 20px; 
-  left: -50px;
-  margin-left: 20px; 
+  margin-left: 40px; 
   align-self: flex-start !important;
-  width: calc(100% -60px);
+  width:350px;
+  left: 0;
   max-width: 800px; 
+  justify-content: center;
 }
+
 
 /* Contenedor de la tabla */
 .table-container {
