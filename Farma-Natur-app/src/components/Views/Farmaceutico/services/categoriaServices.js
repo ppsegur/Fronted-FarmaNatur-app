@@ -43,3 +43,20 @@ export const deleteCategoria = async (nombre) => {
         },
     });
 }
+//FUncion para sacar la categoria con mas productos 
+export const getTopCategoria = async () => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    console.error('No hay token disponible');
+    window.location.href = '/login';
+    return Promise.reject(new Error('No hay token disponible'));
+  }
+
+  return axios.get(`${API_URL}/top-categoria`, {
+    headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json', 
+    },
+  });
+};
