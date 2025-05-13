@@ -7,6 +7,7 @@ import DashboardView from '@/components/Views/dashboard.vue'
 import Verify from '@/components/auth/verify.vue'
 import HomeView from '@/components/Views/HomeView.vue'
 import CategoriaDashboard from './components/Views/Farmaceutico/CategoriaDashboard.vue'
+import CitasDashboard from './components/Views/Farmaceutico/CitasDashboard.vue'
 
 const routes = [
   {
@@ -35,6 +36,11 @@ const routes = [
       path:'/categoria',
       component: CategoriaDashboard,
       meta: { requiresAuth: true, role: ['ADMIN', 'FARMACEUTICO'] }    
+    },
+    {
+      path: "/Citas",
+      component: CitasDashboard,
+      meta: { requiresAuth: true, role: ['ADMIN', 'FARMACEUTICO'] }
     }
 
  

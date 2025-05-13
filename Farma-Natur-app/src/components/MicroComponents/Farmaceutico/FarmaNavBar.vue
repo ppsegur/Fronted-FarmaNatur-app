@@ -62,7 +62,7 @@ const closeNavBar = () => {
           </router-link>
         </li>
         <li>
-          <router-link to="/citas" class="nav-link" @click="closeNavBar">
+          <router-link to="/Citas" class="nav-link" @click="closeNavBar">
             <i class="pi pi-calendar nav-icon"></i>
             <span class="nav-text">Citas</span>
             <i class="pi pi-chevron-right arrow-icon"></i>
