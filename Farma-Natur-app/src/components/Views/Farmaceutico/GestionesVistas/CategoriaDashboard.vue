@@ -22,20 +22,24 @@ onMounted(() => {
 
 <template>
     <FarmaHeader :userName="userName" :userRole="userRole" />
-  
+   
     <div class="dashboard-container">
-      <br>
-      <br>
+    
       <h1 class="dashboard-title">Gestión de Categorías</h1>
-      <CategoriaMessage />
+      <div style="display: flex; flex-direction: row; align-items: flex-start;">
+        <CategoriaMessage />
+        <CategoriaCardMas class="categoria-card-mas" />
+      </div>
 
+
+     
       <hr style="width: 100%; border: none; border-top: 2px solid #e5e7eb; margin: 20px 0;" />
 
     <div class="categoria-layout">
-  <CategoriaCardMas class="categoria-card-mas" />
   <div class="table-container">
     <CategroriaTabla />
   </div>
+
 </div>
     </div>
   </template>
@@ -50,7 +54,7 @@ onMounted(() => {
   height: 100% !important;
   background-color: #f3f4f6; 
   padding: 0;
-  margin-top: 10px;
+  margin-top: 200px;
   width: 100% ;
 }
 .categoria-layout {
@@ -78,7 +82,7 @@ onMounted(() => {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
   border-radius: 8px; 
   padding: 20px; 
-  margin-left: 40px; 
+  margin-left: 140px; 
   align-self: flex-start !important;
   width:350px;
   left: 0;
@@ -96,6 +100,7 @@ onMounted(() => {
   margin-left: 120px;
   width: calc(100% -60px);
   max-width: 800px; 
+  margin-bottom: 20px;
 }
 </style>
 
