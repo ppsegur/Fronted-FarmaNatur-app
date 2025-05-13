@@ -6,6 +6,7 @@
         <tr>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">ID</th>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Nombre</th>
+          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Número de productos </th>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Acciones</th>
         </tr>
       </thead>
@@ -17,9 +18,10 @@
         >
           <td class="border border-gray-300 px-4 py-2">{{ categoria.id }}</td>
          <td class="border border-gray-300 px-4 py-2">{{ categoria.nombre }}</td>
-         <td class="border border-gray-300 px-4 py-2">
+     <td class="border border-gray-300 px-4 py-2">
   {{
-    
+    conteoProductos.find((item) => item.getNombre === categoria.nombre)?.getNumProductos || 0
+
   }}
 </td>
           <td class="border border-gray-300 px-4 py-2 flex justify-center gap-2 ">
@@ -219,12 +221,16 @@ const confirmarEliminarCategoria = async () => {
 //Función parar obtener el conteo de productos por categoría
 const cargarConteoProductos = async () => {
   try {
-    conteoProductos.value = await contarProductosPorCategoria();
+     const response = await contarProductosPorCategoria(); 
+    conteoProductos.value = response.data; 
     console.log("Conteo de productos:", conteoProductos.value);
   } catch (error) {
     console.error("Error al obtener el conteo de productos:", error);
   }
 };
+
+
+
 </script>
 
 
