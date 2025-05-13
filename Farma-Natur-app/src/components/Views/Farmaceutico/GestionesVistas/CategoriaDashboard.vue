@@ -4,9 +4,9 @@ import { ref } from 'vue';
 import { onMounted } from 'vue';
 import { jwtDecode } from 'jwt-decode';
 import FarmaHeader from '@/components/MicroComponents/Farmaceutico/FarmaHeader.vue';
-import CategroriaTabla from './Categorias/CategroriaTabla.vue';
-import CategoriaCardMas from './Categorias/CategoriaCardMas.vue';
-import CategoriaMessage from './messages/CategoriaMessage.vue';
+import CategroriaTabla from '../Categorias/CategroriaTabla.vue';
+import CategoriaCardMas from '../Categorias/CategoriaCardMas.vue';
+import CategoriaMessage from '../messages/CategoriaMessage.vue';
 const userName = ref('');
 const userRole = ref('');
 

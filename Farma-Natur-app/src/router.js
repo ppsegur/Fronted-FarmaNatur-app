@@ -6,7 +6,7 @@ import AuthView from '@/components/auth/AuthView.vue'
 import DashboardView from '@/components/Views/dashboard.vue'
 import Verify from '@/components/auth/verify.vue'
 import HomeView from '@/components/Views/HomeView.vue'
-import CategoriaDashboard from './components/Views/Farmaceutico/CategoriaDashboard.vue'
+import CategoriaDashboard from '@/components/Views/Farmaceutico/GestionesVistas/CategoriaDashboard.vue'
 
 const routes = [
   {
