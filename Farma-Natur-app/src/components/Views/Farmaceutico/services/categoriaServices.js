@@ -60,3 +60,22 @@ export const getTopCategoria = async () => {
     },
   });
 };
+
+// Función para crear una nueva columna para decir el
+// nº de productos que tiene la categoria
+export const contarProductosPorCategoria = async () => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    console.error('No hay token disponible');
+    window.location.href = '/login';
+    return Promise.reject(new Error('No hay token disponible'));
+  }
+
+  return axios.get(`http://localhost:8080/conteo-productos`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+};

@@ -6,6 +6,7 @@
         <tr>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">ID</th>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Nombre</th>
+          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Número de productos </th>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Acciones</th>
         </tr>
       </thead>
@@ -16,7 +17,13 @@
           class="hover:bg-green-200 transition-colors duration-200"
         >
           <td class="border border-gray-300 px-4 py-2">{{ categoria.id }}</td>
-          <td class="border border-gray-300 px-4 py-2">{{ categoria.nombre }}</td>
+         <td class="border border-gray-300 px-4 py-2">{{ categoria.nombre }}</td>
+     <td class="border border-gray-300 px-4 py-2">
+  {{
+    conteoProductos.find((item) => item.getNombre === categoria.nombre)?.getNumProductos || 0
+
+  }}
+</td>
           <td class="border border-gray-300 px-4 py-2 flex justify-center gap-2 ">
 
             
@@ -135,7 +142,7 @@
 <script setup>
 import IconButton from '../botones/IconButton.vue';
 import { onMounted, ref, watch } from 'vue';
-import { getCategorias, editCategoria, deleteCategoria } from '../services/categoriaServices.js';
+import { getCategorias, editCategoria, deleteCategoria, contarProductosPorCategoria } from '../services/categoriaServices.js';
 
 const categorias = ref([]);
 const modalEditarVisible = ref(false);
@@ -143,6 +150,7 @@ const modalEliminarVisible = ref(false);
 const categoriaSeleccionada = ref('');
 const categoriaAEditar = ref({ id: null, nombre: '' });
 const categoriaAEliminarNombre = ref('');
+const conteoProductos = ref([]);
 
 watch([modalEditarVisible, modalEliminarVisible], ([editar, eliminar]) => {
 document.body.style.overflow = (editar || eliminar) ? 'hidden' : 'auto';
@@ -152,6 +160,7 @@ document.body.style.overflow = (editar || eliminar) ? 'hidden' : 'auto';
 
 onMounted(async () => {
   await cargarCategorias();
+  await cargarConteoProductos();
 });
 
 const cargarCategorias = async () => {
@@ -208,6 +217,20 @@ const confirmarEliminarCategoria = async () => {
     console.error("Error al eliminar la categoría:", error);
   }
 };
+
+//Función parar obtener el conteo de productos por categoría
+const cargarConteoProductos = async () => {
+  try {
+     const response = await contarProductosPorCategoria(); 
+    conteoProductos.value = response.data; 
+    console.log("Conteo de productos:", conteoProductos.value);
+  } catch (error) {
+    console.error("Error al obtener el conteo de productos:", error);
+  }
+};
+
+
+
 </script>
 
 
