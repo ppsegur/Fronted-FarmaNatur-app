@@ -21,6 +21,7 @@
 }
 html, body, #app {
   height: 100%;
+  width: 100%;
 }
 .app-container {
   display: flex;
