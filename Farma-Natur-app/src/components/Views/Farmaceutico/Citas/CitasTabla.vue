@@ -9,7 +9,9 @@
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Paciente</th>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Fecha</th>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Hora</th>
-          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Fecha</th>
+          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Precio</th>
+          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Oferta</th>
+          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Turno</th>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Acciones</th>
         </tr>
       </thead>
@@ -24,6 +26,8 @@
         <td class="border border-gray-300 px-4 py-2">{{ cita.usernameCliente?.username }}</td>
     <td class="border border-gray-300 px-4 py-2">{{ cita.fecha_inicio.slice(0, 10) }}</td>
     <td class="border border-gray-300 px-4 py-2">{{ cita.fecha_inicio.slice(11, 16) }}</td>
+    <td class="border border-gray-300 px-4 py-2">{{ cita.precio }}</td>
+    <td class="border border-gray-300 px-4 py-2">{{ cita.oferta }}</td>
         <td class="border border-gray-300 px-4 py-2">{{ obtenerTurno(cita.fecha_inicio) }}</td>
 
     <td class="border border-gray-300 px-4 py-2 flex justify-center gap-2">

@@ -26,7 +26,7 @@ onMounted(() => {
     <div class="dashboard-container">
     
       <h1 class="dashboard-title">Gestión de Categorías</h1>
-      <div style="display: flex; flex-direction: row; align-items: flex-start;">
+      <div style="display: flex; flex-direction: row; align-items: flex-start; padding-left:50px ;">
         <CategoriaMessage />
         <CategoriaCardMas class="categoria-card-mas" />
       </div>
