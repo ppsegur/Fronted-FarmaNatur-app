@@ -31,8 +31,12 @@ export const deleteCita = async (titulo) => {
 };
 export const updateCita = async (cita, data) => {
   const token = localStorage.getItem('token');
+  const clienteId = cita.clienteId;
+  const farmaceuticoId = cita.farmaceuticoId;
+  const fechaInicio = cita.fecha_inicio;
+
   return axios.put(
-    `http://localhost:8080/citas/${encodeURIComponent(cita.titulo)}`, // <-- usa 'titulo'
+    `http://localhost:8080/citas/editar?clienteId=${clienteId}&farmaceuticoId=${farmaceuticoId}&fechaInicio=${encodeURIComponent(fechaInicio)}`,
     data,
     {
       headers: {
@@ -42,5 +46,6 @@ export const updateCita = async (cita, data) => {
     }
   );
 };
+
 
 

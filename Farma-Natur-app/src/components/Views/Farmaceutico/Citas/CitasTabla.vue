@@ -83,12 +83,11 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { getCitas, deleteCita, updateCita } from '../services/citasServices.js';
-
+import { getUsuarioByUsername } from '../services/usuariosServices.js';
 const citas = ref([]);
 
 const citaSeleccionada = ref(null);
 const modalEditarVisible = ref(false);
-const modalEliminarVisible = ref(false);
 const cargarCitas = async () => {
   try {
     const response = await getCitas();
@@ -125,37 +124,54 @@ console.log("Cita seleccionada:", citaSeleccionada.value);
 
 const guardarCitaEditada = async () => {
   try {
-  console.log("Datos enviados al backend:", {
-  titulo: citaSeleccionada.value.titulo,
-  usernameFarma: citaSeleccionada.value.usernameFarma?.username || citaSeleccionada.value.usernameFarma,
-  usernameCliente: citaSeleccionada.value.usernameCliente?.username || citaSeleccionada.value.usernameCliente,
-  precio: citaSeleccionada.value.precio,
-  oferta: citaSeleccionada.value.oferta,
-  fecha_inicio: citaSeleccionada.value.fecha_inicio,
-  fecha_fin: citaSeleccionada.value.fecha_fin,
-});
-await updateCita(citaSeleccionada.value, {
-  tittle: citaSeleccionada.value.titulo, // o 'titulo' si tu backend lo espera así
-  usernameFarma: typeof citaSeleccionada.value.usernameFarma === 'object'
-    ? citaSeleccionada.value.usernameFarma.username
-    : citaSeleccionada.value.usernameFarma,
-  usernameCliente: typeof citaSeleccionada.value.usernameCliente === 'object'
-    ? citaSeleccionada.value.usernameCliente.username
-    : citaSeleccionada.value.usernameCliente,
-  precio: citaSeleccionada.value.precio,
-  oferta: citaSeleccionada.value.oferta,
-  fecha_inicio: citaSeleccionada.value.fecha_inicio,
-  fecha_fin: citaSeleccionada.value.fecha_fin,
-});
+    // 1. Obtener los IDs a partir de los usernames
+    const clienteResp = await getUsuarioByUsername(
+      typeof citaSeleccionada.value.usernameCliente === 'object'
+        ? citaSeleccionada.value.usernameCliente.username
+        : citaSeleccionada.value.usernameCliente
+    );
+    const farmaceuticoResp = await getUsuarioByUsername(
+      typeof citaSeleccionada.value.usernameFarma === 'object'
+        ? citaSeleccionada.value.usernameFarma.username
+        : citaSeleccionada.value.usernameFarma
+    );
+
+    const clienteId = clienteResp.data.id;
+    const farmaceuticoId = farmaceuticoResp.data.id;
+    const fechaInicio = citaSeleccionada.value.fecha_inicio;
+
+    // 2. Llama a updateCita con los IDs y el DTO
+    console.log("Lo que ase manda al BAckend:", {
+      clienteId,
+      farmaceuticoId,
+      fecha_inicio: fechaInicio,
+      titulo: citaSeleccionada.value.titulo,
+      usernameFarma: farmaceuticoResp.data.username,
+      usernameCliente: clienteResp.data.username,
+      precioCita: citaSeleccionada.value.precio,
+      especial: citaSeleccionada.value.oferta,
+      fecha_inicio: citaSeleccionada.value.fecha_inicio,
+      fecha_fin: citaSeleccionada.value.fecha_fin,
+    });
+ await updateCita(
+  { clienteId, farmaceuticoId, fecha_inicio: fechaInicio },
+  {
+    tittle: citaSeleccionada.value.titulo,
+      usernameFarma: { id: farmaceuticoResp.data.id }, 
+    usernameCliente: { id: clienteResp.data.id },    
+    precio: citaSeleccionada.value.precio,
+    oferta: citaSeleccionada.value.oferta,
+    fecha_inicio: citaSeleccionada.value.fecha_inicio,
+    fecha_fin: citaSeleccionada.value.fecha_fin,
+  }
+);
 
     await cargarCitas();
-    console.log("Cita actualizada:", citaSeleccionada.value);
     modalEditarVisible.value = false;
   } catch (error) {
     console.error("Error actualizando cita:", error);
   }
 };
-
 const eliminarCita = async (titulo) => {
   try {
     await deleteCita(titulo);
