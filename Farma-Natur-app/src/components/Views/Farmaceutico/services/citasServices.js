@@ -19,3 +19,28 @@ export const getCitas = async () => {
     },
   });
 };
+
+
+export const deleteCita = async (titulo) => {
+  const token = localStorage.getItem('token');
+  return axios.delete(`http://localhost:8080/citas/${titulo}`, {
+    headers: { Authorization: `Bearer ${token}`,
+                'Content-Type': 'application/json',
+    },
+  });
+};
+export const updateCita = async (cita, data) => {
+  const token = localStorage.getItem('token');
+  return axios.put(
+    `http://localhost:8080/citas/${encodeURIComponent(cita.titulo)}`, // <-- usa 'titulo'
+    data,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+};
+
+

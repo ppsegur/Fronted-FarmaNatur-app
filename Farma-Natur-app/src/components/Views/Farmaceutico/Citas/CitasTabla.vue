@@ -4,7 +4,7 @@
     <table class="table-auto border-collapse w-full border border-gray-300 bg-gray-50">
       <thead class="bg-green-100">
         <tr>
-          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">ID</th>
+          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Titulo</th>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Farmaceutico</th>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Paciente</th>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Fecha</th>
@@ -48,19 +48,54 @@
 </tbody>
     </table>
   </div>
+
+  <Teleport to="body">
+  <div v-if="modalEditarVisible" class="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 shadow-2xl w-full max-w-md">
+      <h2 class="text-xl font-bold text-blue-600 mb-4">Editar Cita</h2>
+      <form @submit.prevent="guardarCitaEditada">
+        <label class="block mb-2 text-sm font-medium">Fecha Inicio</label>
+        <input type="datetime-local" v-model="citaSeleccionada.fecha_inicio" class="w-full mb-4 border p-2 rounded" />
+        
+        <label class="block mb-2 text-sm font-medium">Fecha Fin</label>
+        <input type="datetime-local" v-model="citaSeleccionada.fecha_fin" class="w-full mb-4 border p-2 rounded" />
+        
+        <label class="block mb-2 text-sm font-medium">Precio</label>
+        <input type="number" v-model="citaSeleccionada.precio" class="w-full mb-4 border p-2 rounded" />
+
+        <label class="block mb-2 text-sm font-medium">Especial</label>
+        <select v-model="citaSeleccionada.oferta" class="w-full mb-4 border p-2 rounded">
+          <option :value="true">Sí</option>
+          <option :value="false">No</option>
+        </select>
+
+        <div class="flex justify-end gap-2">
+          <button type="button" class="bg-gray-300 px-4 py-2 rounded" @click="modalEditarVisible = false">Cancelar</button>
+          <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</Teleport>
+
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getCitas } from '../services/citasServices.js';
+import { getCitas, deleteCita, updateCita } from '../services/citasServices.js';
 
 const citas = ref([]);
 
+const citaSeleccionada = ref(null);
+const modalEditarVisible = ref(false);
+const modalEliminarVisible = ref(false);
 const cargarCitas = async () => {
   try {
     const response = await getCitas();
-    console.log('Citas obtenidas:', response.data);
-    citas.value = response.data; // Asigna las citas obtenidas
+    citas.value = response.data.map(cita => ({
+      ...cita,
+      titulo: cita.tittle || cita.titulo // Soporta ambos por compatibilidad
+    }));
   } catch (error) {
     console.error('Error al obtener las citas:', error);
   }
@@ -80,6 +115,55 @@ function turnoClase(turno) {
   if (turno === 'Noche') return 'hover-noche';
   return '';
 }
+
+
+const editarCita = (cita) => {
+  citaSeleccionada.value = { ...cita };
+  modalEditarVisible.value = true;
+};
+console.log("Cita seleccionada:", citaSeleccionada.value);
+
+const guardarCitaEditada = async () => {
+  try {
+  console.log("Datos enviados al backend:", {
+  titulo: citaSeleccionada.value.titulo,
+  usernameFarma: citaSeleccionada.value.usernameFarma?.username || citaSeleccionada.value.usernameFarma,
+  usernameCliente: citaSeleccionada.value.usernameCliente?.username || citaSeleccionada.value.usernameCliente,
+  precio: citaSeleccionada.value.precio,
+  oferta: citaSeleccionada.value.oferta,
+  fecha_inicio: citaSeleccionada.value.fecha_inicio,
+  fecha_fin: citaSeleccionada.value.fecha_fin,
+});
+await updateCita(citaSeleccionada.value, {
+  tittle: citaSeleccionada.value.titulo, // o 'titulo' si tu backend lo espera así
+  usernameFarma: typeof citaSeleccionada.value.usernameFarma === 'object'
+    ? citaSeleccionada.value.usernameFarma.username
+    : citaSeleccionada.value.usernameFarma,
+  usernameCliente: typeof citaSeleccionada.value.usernameCliente === 'object'
+    ? citaSeleccionada.value.usernameCliente.username
+    : citaSeleccionada.value.usernameCliente,
+  precio: citaSeleccionada.value.precio,
+  oferta: citaSeleccionada.value.oferta,
+  fecha_inicio: citaSeleccionada.value.fecha_inicio,
+  fecha_fin: citaSeleccionada.value.fecha_fin,
+});
+
+    await cargarCitas();
+    console.log("Cita actualizada:", citaSeleccionada.value);
+    modalEditarVisible.value = false;
+  } catch (error) {
+    console.error("Error actualizando cita:", error);
+  }
+};
+
+const eliminarCita = async (titulo) => {
+  try {
+    await deleteCita(titulo);
+    await cargarCitas();
+  } catch (error) {
+    console.error("Error eliminando cita:", error);
+  }
+};
 
 
 onMounted(() => {
