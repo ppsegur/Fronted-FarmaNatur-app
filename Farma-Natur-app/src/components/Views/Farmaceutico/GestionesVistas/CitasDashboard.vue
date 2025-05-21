@@ -24,8 +24,32 @@ onMounted(() => {
     <h1 class="dashboard-title">Gestión de Citas</h1>
     <hr style="border: 1px solid #ccc; width: 100%;" />
     <br>
-    <div style="display: flex; flex-direction: row; align-items: flex-start; padding-left: 100px; padding-right: 100px; padding-bottom: 100px;">
-        <CitasTabla />
+    <div class="dashboard-tabla">
+    <CitasTabla />
     </div>
     </div>
 </template>
+
+<style scoped>
+.dashboard-container {
+  margin-top:20px
+}
+.dashboard-tabla {
+   background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  border: 1px solid #e0e0e0;
+  padding: 32px 24px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding-left: 100px;
+  padding-right: 100px;
+  padding-bottom: 30px;
+  margin-bottom: 20px;
+}
+
+</style>
