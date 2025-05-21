@@ -48,6 +48,13 @@ const closeNavBar = () => {
           </router-link>
         </li>
         <li>
+          <router-link to="/categoria" class="nav-link" @click="closeNavBar">
+            <i class="pi pi-shopping-bag nav-icon"></i>
+            <span class="nav-text">Categoria</span>
+            <i class="pi pi-chevron-right arrow-icon"></i>
+          </router-link>
+        </li>
+        <li>
           <router-link to="/pedidos" class="nav-link" @click="closeNavBar">
             <i class="pi pi-shopping-cart nav-icon"></i>
             <span class="nav-text">Pedidos</span>
@@ -55,7 +62,7 @@ const closeNavBar = () => {
           </router-link>
         </li>
         <li>
-          <router-link to="/citas" class="nav-link" @click="closeNavBar">
+          <router-link to="/Citas" class="nav-link" @click="closeNavBar">
             <i class="pi pi-calendar nav-icon"></i>
             <span class="nav-text">Citas</span>
             <i class="pi pi-chevron-right arrow-icon"></i>
@@ -254,7 +261,7 @@ const closeNavBar = () => {
 
 /* Añade margen superior al botón de logout para separarlo del user-info */
 .logout-btn {
-  margin-top: -30px;
+  margin-top: -100px;
 }
 
 .logout-btn {
