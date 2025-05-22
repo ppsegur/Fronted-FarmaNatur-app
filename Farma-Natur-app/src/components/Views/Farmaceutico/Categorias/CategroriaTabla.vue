@@ -17,16 +17,13 @@
           class="hover:bg-green-200 transition-colors duration-200"
         >
           <td class="border border-gray-300 px-4 py-2">{{ categoria.id }}</td>
-         <td class="border border-gray-300 px-4 py-2">{{ categoria.nombre }}</td>
-     <td class="border border-gray-300 px-4 py-2">
-  {{
-    conteoProductos.find((item) => item.getNombre === categoria.nombre)?.getNumProductos || 0
-
-  }}
-</td>
+          <td class="border border-gray-300 px-4 py-2">{{ categoria.nombre }}</td>
+          <td class="border border-gray-300 px-4 py-2">
+            {{
+              conteoProductos.find((item) => item.getNombre === categoria.nombre)?.getNumProductos || 0
+            }}
+          </td>
           <td class="border border-gray-300 px-4 py-2 flex justify-center gap-2 ">
-
-            
             <IconButton
               tooltip="Editar"
               color="blue"
@@ -49,89 +46,68 @@
         </tr>
       </tbody>
     </table>
-        <!-- Modal de eliminar -->
+
+    <!-- Modal Eliminar -->
     <Teleport to="body">
-<div
-  v-if="modalEliminarVisible"
-  class="fixed inset-0 z-50 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center"
->
-  <div
-    class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm transform transition-transform duration-300 scale-100"
-  > 
-  <!-- Imagen dentro del modal -->
-  <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 16px;">
-  <img
-    src="../../../../assets/img/DeleteImageModal.png"
-    alt="Eliminar categoría"
-    style="width: 96px; height: 96px; object-fit: cover;"
-  />
-</div>
-    <h2 class="text-xl font-semibold mb-4 text-red-700">Eliminar Categoría</h2>
-    <p class="mb-7 text-black-700">
-      ¿Estás seguro de que deseas eliminar la categoría <strong>{{ categoriaAEliminarNombre }}</strong>?
-    </p>
-    <div class="flex justify-center gap-4 mt-6">
-  <button
-    type="button"
-    class="custom-button bg-gray-200 text-gray-700 mr-2"
-    @click="cerrarModalEliminar"
-  >
-    <span>Cancelar</span>
-  </button>
-  <button
-    type="button"
-    class="custom-button-delete bg-red-500 text-white"
-    @click="confirmarEliminarCategoria"
-  >
-    <span>Eliminar</span>
-  </button>
-</div>
-  </div>
-</div>
-</Teleport>
+      <div v-if="modalEliminarVisible" class="modal-overlay">
+        <div class="modal-box">
+          <img
+            src="../../../../assets/img/DeleteImageModal.png"
+            alt="Eliminar categoría"
+          />
+          <h2 class="modal-title" style="color:#e53e3e;">Eliminar Categoría</h2>
+          <div class="modal-text">
+            ¿Estás seguro de que deseas eliminar la categoría <strong>{{ categoriaAEliminarNombre }}</strong>?
+          </div>
+          <div class="flex justify-center gap-4 mt-6">
+            <button
+              type="button"
+              class="custom-button bg-gray-200 text-gray-700"
+              @click="cerrarModalEliminar"
+            >
+              <span>Cancelar</span>
+            </button>
+            <button
+              type="button"
+              class="custom-button-delete bg-red-500 text-white"
+              @click="confirmarEliminarCategoria"
+            >
+              <span>Eliminar</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </Teleport>
 
     <!-- Modal Editar -->
     <Teleport to="body">
-      <div
-        v-if="modalEditarVisible"
-        class="fixed inset-0 z-50 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center"
-      >
-        <div
-          class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md transform transition-transform duration-300 scale-100"
-        >
-          <h2 class="text-xl font-semibold mb-4 text-black-700"> Editar Categoría</h2>
-          <br>
+      <div v-if="modalEditarVisible" class="modal-overlay">
+        <div class="modal-box">
+          <h2 class="modal-title" style="color:#2563eb;">Editar Categoría</h2>
           <form @submit.prevent="guardarEdicionCategoria">
-            <div class="mb-4">
-              <div class="input-container">
-  <input
-    id="nombre"
-    type="text"
-    v-model="categoriaAEditar.nombre"
-    class="input"
-    placeholder=" "
-  />
-  <label for="nombre" class="label">Nombre</label>
-  <div class="topline"></div>
-  <div class="underline"></div>
-  </div>
-</div>
-<div class="flex justify-center gap-4 mt-6">
-  <button
-    type="button"
-    class="custom-button bg-gray-200 text-gray-700"
-    @click="cerrarModalEditar"
-  >
-    <span>Cancelar</span>
-  </button>
-  <button
-    type="submit"
-    class="custom-button bg-blue-500 text-white flex items-center justify-center"
-    @click="guardarEdicionCategoria"
-  >
-    <span>Guardar Cambios</span>
-  </button>
-</div>
+            <div class="formField">
+              <input
+                type="text"
+                v-model="categoriaAEditar.nombre"
+                required
+              />
+              <span>Nombre</span>
+            </div>
+            <div class="flex justify-center gap-4 mt-6">
+              <button
+                type="button"
+                class="custom-button bg-gray-200 text-gray-700"
+                @click="cerrarModalEditar"
+              >
+                <span>Cancelar</span>
+              </button>
+              <button
+                type="submit"
+                class="custom-button bg-blue-500 text-white"
+              >
+                <span>Guardar Cambios</span>
+              </button>
+            </div>
           </form>
         </div>
       </div>
@@ -153,10 +129,8 @@ const categoriaAEliminarNombre = ref('');
 const conteoProductos = ref([]);
 
 watch([modalEditarVisible, modalEliminarVisible], ([editar, eliminar]) => {
-document.body.style.overflow = (editar || eliminar) ? 'hidden' : 'auto';
+  document.body.style.overflow = (editar || eliminar) ? 'hidden' : 'auto';
 });
-
-
 
 onMounted(async () => {
   await cargarCategorias();
@@ -172,40 +146,40 @@ const cargarCategorias = async () => {
 };
 
 const abrirModalEditar = (categoria) => {
-categoriaSeleccionada.value = categoria.nombre; // Guarda el nombre actual
-categoriaAEditar.value = { nombre: categoria.nombre }; // Inicializa el nuevo nombre con el actual
-modalEditarVisible.value = true;
-modalEliminarVisible.value = false;
+  categoriaSeleccionada.value = categoria.nombre;
+  categoriaAEditar.value = { nombre: categoria.nombre };
+  modalEditarVisible.value = true;
+  modalEliminarVisible.value = false;
 };
 const cerrarModalEditar = () => {
-modalEditarVisible.value = false;
-categoriaSeleccionada.value = '';
-categoriaAEditar.value = { nombre: '' };
+  modalEditarVisible.value = false;
+  categoriaSeleccionada.value = '';
+  categoriaAEditar.value = { nombre: '' };
 };
 
 const guardarEdicionCategoria = async () => {
-try {
-  await editCategoria(categoriaSeleccionada.value, { nombre: categoriaAEditar.value.nombre });
-  await cargarCategorias();
-  cerrarModalEditar();
-} catch (error) {
-  if (error.response) {
-    console.error("Error del backend:", error.response.data);
-  } else {
-    console.error("Error al actualizar la categoría:", error);
+  try {
+    await editCategoria(categoriaSeleccionada.value, { nombre: categoriaAEditar.value.nombre });
+    await cargarCategorias();
+    cerrarModalEditar();
+  } catch (error) {
+    if (error.response) {
+      console.error("Error del backend:", error.response.data);
+    } else {
+      console.error("Error al actualizar la categoría:", error);
+    }
   }
-}
 };
 
 const abrirModalEliminar = (categoria) => {
-categoriaAEliminarNombre.value = categoria.nombre;
-modalEliminarVisible.value = true;
-modalEditarVisible.value = false;
+  categoriaAEliminarNombre.value = categoria.nombre;
+  modalEliminarVisible.value = true;
+  modalEditarVisible.value = false;
 };
 
 const cerrarModalEliminar = () => {
-modalEliminarVisible.value = false;
-categoriaAEliminarNombre.value = '';
+  modalEliminarVisible.value = false;
+  categoriaAEliminarNombre.value = '';
 };
 
 const confirmarEliminarCategoria = async () => {
@@ -218,25 +192,17 @@ const confirmarEliminarCategoria = async () => {
   }
 };
 
-//Función parar obtener el conteo de productos por categoría
 const cargarConteoProductos = async () => {
   try {
-     const response = await contarProductosPorCategoria(); 
-    conteoProductos.value = response.data; 
-    console.log("Conteo de productos:", conteoProductos.value);
+    const response = await contarProductosPorCategoria();
+    conteoProductos.value = response.data;
   } catch (error) {
     console.error("Error al obtener el conteo de productos:", error);
   }
 };
-
-
-
 </script>
 
-
-
 <style scoped>
-/* Estilos para la tabla */
 .table-auto {
   border-spacing: 0;
 }
@@ -260,7 +226,6 @@ td.flex {
   display: flex;
   justify-content: center;
   align-items: center;
-
   gap: 8px;
 }
 tr:hover {
@@ -276,120 +241,109 @@ tr:hover {
   color: #4a5568;
   font-size: 0.875rem;
 }
-.fixed {
+
+/* MODALES IGUAL QUE EN CITAS */
+.modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(174, 244, 174, 0.85);
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #aef4ae;
-  z-index: 1000;
-  width: 500px;
-  height: 300px;
-  margin-left: 350px;
-  margin-top: 200px;
+}
+
+.modal-box {
+  background: #fff;
   border-radius: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.655);
-}
-/* Estilo para centrar y bajar los botones */
-.flex {
-  justify-content: center;
-  gap: 16px; /* Espaciado entre botones */
-}
-
-.mt-6 {
-  margin-top: 24px; /* Bajar los botones */
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  padding: 2.5rem 2rem;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  animation: modalIn 0.3s;
 }
 
+@keyframes modalIn {
+  from { transform: translateY(40px) scale(0.95); opacity: 0; }
+  to   { transform: translateY(0) scale(1); opacity: 1; }
+}
 
+.modal-box img {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  margin-bottom: 18px;
+}
+
+.modal-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #2563eb;
+  margin-bottom: 1rem;
+}
 
 .modal-text {
-  gap: 4px;
-  font-size: 1rem;
-  font-weight: bold; /* Letras más fuertes */
-  color: #4a5568; /* Gris oscuro */
-  margin-bottom: 24px;
+  color: #444;
+  margin-bottom: 2rem;
+  font-size: 1.05rem;
 }
-/* Contenedor del input */
-.input-container {
+
+.flex {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 1.5rem;
+}
+
+/* Inputs del modal */
+.formField {
+  margin: 18px 0 0 0;
   position: relative;
-  margin-bottom: 16px;
+  width: 100%;
 }
 
-/* Estilo del input */
-.input {
-  padding: 10px;
-  height: 40px;
+.formField input {
   width: 100%;
-  border: 2px solid #0B2447;
-  border-top: none;
-  border-bottom: none;
-  font-size: 16px;
-  background: transparent;
+  padding: 10px 15px;
   outline: none;
-  box-shadow: 7px 7px 0px 0px #0B2447;
-  transition: all 0.5s;
+  border: none;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+  color: #333;
+  font-size: 16px;
+  font-weight: 550;
+  transition: 0.3s;
+  box-shadow: 0 0 0 2px transparent;
 }
 
-.input:focus {
-  box-shadow: none;
-  transition: all 0.5s;
+.formField input:hover,
+.formField input:focus {
+  box-shadow: 0 0 0 2px #35eb25;
 }
 
-/* Estilo del label */
-.label {
+.formField span {
   position: absolute;
+  left: 15px;
   top: 10px;
-  left: 10px;
-  color: #0B2447;
-  font-size: 14px;
-  transition: all 0.5s;
-  transform: scale(0);
-  z-index: -1;
+  color: #666;
+  font-size: 15px;
+  font-weight: 600;
+  pointer-events: none;
+  transition: 0.2s;
+  background: transparent;
 }
 
-/* Línea superior animada */
-.input-container .topline {
-  position: absolute;
-  background-color: #0B2447;
-  width: 0%;
-  height: 2px;
-  right: 0;
-  top: 0;
-  transition: all 0.5s;
+.formField input:focus + span,
+.formField input:valid + span {
+  transform: translateY(-22px) scale(0.95);
+  color: #4deb25;
+  background: #fff;
+  padding: 0 4px;
 }
 
-.input-container input[type="text"]:focus ~ .topline {
-  width: 35%;
-  transition: all 0.5s;
-}
-
-/* Línea inferior animada */
-.input-container .underline {
-  position: absolute;
-  background-color: #0B2447;
-  width: 0%;
-  height: 2px;
-  right: 0;
-  bottom: 0;
-  transition: all 0.5s;
-}
-
-.input-container input[type="text"]:focus ~ .underline {
-  width: 100%;
-  transition: all 0.5s;
-}
-
-/* Animación del label al enfocar */
-.input-container input[type="text"]:focus ~ .label {
-  top: -10px;
-  transform: scale(1);
-  transition: all 0.5s;
-}
-/*Estilos para los botones de los mosales */
+/* Botones igual que en Citas */
 .custom-button {
   outline: none;
   cursor: pointer;
@@ -401,13 +355,12 @@ tr:hover {
   position: relative;
   display: inline-block;
   letter-spacing: 0.05rem;
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
+  justify-content: center;
+  align-items: center;
   font-weight: 500;
   font-size: 14px;
   border-radius: 500px;
   overflow: hidden;
-  align-items: center;
   background: #66ff66;
   color: ghostwhite;
   transition: all 0.4s ease;
@@ -419,19 +372,8 @@ tr:hover {
   transition: color 0.4s;
 }
 
-
 .custom-button:hover span {
   color: black;
-}
-
-.custom-button::before,
-.custom-button::after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
 }
 
 .custom-button::before {
@@ -439,6 +381,10 @@ tr:hover {
   background: #000;
   width: 120%;
   left: -10%;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  z-index: 0;
   transform: skew(30deg);
   transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
 }
@@ -447,7 +393,6 @@ tr:hover {
   transform: translate3d(100%, 0, 0);
 }
 
-/**Estilos botones de eliminar  */
 .custom-button-delete {
   outline: none;
   cursor: pointer;
@@ -459,13 +404,12 @@ tr:hover {
   position: relative;
   display: inline-block;
   letter-spacing: 0.05rem;
-  justify-content: center; /* Centra horizontalmente */
-  align-items: center; /* Centra verticalmente */
+  justify-content: center;
+  align-items: center;
   font-weight: 500;
   font-size: 14px;
   border-radius: 500px;
   overflow: hidden;
-  align-items: center;
   background: #ff0000;
   color: ghostwhite;
   transition: all 0.4s ease;
@@ -477,27 +421,20 @@ tr:hover {
   transition: color 0.4s;
 }
 
-
 .custom-button-delete:hover span {
   color: black;
-}
-
-.custom-button-delete::before,
-.custom-button-delete::after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
 }
 
 .custom-button-delete::before {
   content: "";
   background: #000000;
   width: 120%;
-  color:white;
+  color: white;
   left: -10%;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  z-index: 0;
   transform: skew(30deg);
   transition: transform 0.4s cubic-bezier(0.3, 1, 0.8, 1);
 }
@@ -505,5 +442,4 @@ tr:hover {
 .custom-button-delete:hover::before {
   transform: translate3d(100%, 0, 0);
 }
-
 </style>
