@@ -7,6 +7,11 @@ import CitasTabla from '../Citas/CitasTabla.vue';
 const userName = ref('');
 const userRole = ref('');
 
+// Importaciones de las cards 
+import CitasCardClienteMas from '../Citas/CitasCardClienteMas.vue';
+import CitasCardFarmaMas from '../Citas/CitasCardFarmaMas.vue';
+
+
 onMounted(() => {
   const token = localStorage.getItem('token');
   if (token) {
@@ -23,6 +28,10 @@ onMounted(() => {
   <div class="dashboard-container" style="padding-top: 150px;">
     <h1 class="dashboard-title">Gestión de Citas</h1>
     <hr style="border: 1px solid #ccc; width: 100%;" />
+    <div class="citas-card"> 
+    <CitasCardClienteMas />
+    <CitasCardFarmaMas />
+    </div>
     <br>
     <div class="dashboard-tabla">
     <CitasTabla />
@@ -47,9 +56,18 @@ onMounted(() => {
   flex-direction: row;
   align-items: flex-start;
   padding-left: 100px;
+  padding-top:- 100px;
   padding-right: 100px;
   padding-bottom: 30px;
   margin-bottom: 20px;
+}
+.citas-card {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  justify-content: center;
+  align-items: flex-start;
+  margin-bottom: 16px;
 }
 
 </style>
