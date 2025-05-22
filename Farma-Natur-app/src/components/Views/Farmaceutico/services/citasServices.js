@@ -20,7 +20,7 @@ export const getCitas = async () => {
   });
 };
 
-
+// FUNCION PARA ELIMINAR UNA CITA
 export const deleteCita = async (titulo) => {
   const token = localStorage.getItem('token');
   return axios.delete(`http://localhost:8080/citas/${titulo}`, {
@@ -29,6 +29,7 @@ export const deleteCita = async (titulo) => {
     },
   });
 };
+// FUNCION PARA EDITAR UNA CITA
 export const updateCita = async (cita, data) => {
   const token = localStorage.getItem('token');
   const clienteId = cita.clienteId;
@@ -46,6 +47,41 @@ export const updateCita = async (cita, data) => {
     }
   );
 };
+//FUNCION PARA OBTENER EL NOMBRE DEL FARMACEUTICO CON MAS CITAS 
+export const getFarmaceuticoConMasCitas = async () => {
+  const token = localStorage.getItem('token');
 
+  if (!token) {
+    console.error('No hay token disponible');
+    window.location.href = '/login';
+    return Promise.reject(new Error('No hay token disponible'));
+  }
+
+  return axios.get(`${API_URL}/farmaceutico-mas-citas`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+}
+
+
+// FUNCION PARA OBTENER EL NOMBRE DEL CLIENTE CON MAS CITAS
+export const getClienteConMasCitas = async () => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    console.error('No hay token disponible');
+    window.location.href = '/login';
+    return Promise.reject(new Error('No hay token disponible'));
+  }
+
+  return axios.get(`${API_URL}/cliente-mas-citas`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+};
 
 
