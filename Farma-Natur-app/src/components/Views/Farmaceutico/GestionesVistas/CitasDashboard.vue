@@ -24,7 +24,9 @@ onMounted(() => {
 
 <template>
         <FarmaHeader :userName="userName" :userRole="userRole" />
-
+<br><br>
+<br><br>
+<br><br>
   <div class="dashboard-container" style="padding-top: 150px;">
     <h1 class="dashboard-title">Gestión de Citas</h1>
     <hr style="border: 1px solid #ccc; width: 100%;" />
@@ -48,7 +50,7 @@ onMounted(() => {
   border-radius: 16px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.12);
   border: 1px solid #e0e0e0;
-  padding: 32px 24px;
+  justify-content: center;
   margin: 0 auto;
   width: 100%;
   max-width: 1100px;
