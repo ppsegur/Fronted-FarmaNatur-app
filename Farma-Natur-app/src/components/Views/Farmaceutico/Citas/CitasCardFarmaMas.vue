@@ -8,27 +8,34 @@
     </div>
     <div class="card-title">Farmacéutico con más citas</div>
     <div class="card-data">
-      <span v-if="farmaceutico">{{ farmaceutico.nombre }}</span>
+      <span v-if="farmaceutico">{{ farmaceutico.username }}</span>
       <span v-else>Cargando...</span>
     </div>
-    <div class="card-subdata" v-if="farmaceutico">
-      Total citas: <b>{{ farmaceutico.totalCitas }}</b>
+    <div class="card-subdata" v-if="numeroCitas !== null">
+      Total citas: <b>{{ numeroCitas }}</b>
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getFarmaceuticoConMasCitas } from '../services/citasServices.js';
+import { getFarmaceuticoConMasCitas, getNumeroDeCitasFarmaceutico } from '../services/citasServices.js';
 
 const farmaceutico = ref(null);
+const numeroCitas = ref(null);
 
 onMounted(async () => {
   try {
     const res = await getFarmaceuticoConMasCitas();
     farmaceutico.value = res.data;
+
+    if (farmaceutico.value?.username) {
+      const response = await getNumeroDeCitasFarmaceutico(farmaceutico.value.username);
+      numeroCitas.value = response.data;
+    }
   } catch (e) {
-    farmaceutico.value = { nombre: 'No disponible', totalCitas: '-' };
+    farmaceutico.value = { username: 'No disponible' };
+    numeroCitas.value = '-';
   }
 });
 </script>
@@ -38,7 +45,7 @@ onMounted(async () => {
   width: 150px;
   height: 180px;
   border-radius: 22px;
-  background: #e0e0e0;
+  background: #efefef;
   box-shadow: 8px 8px 18px #bebebe, -8px -8px 18px #ffffff;
   display: flex;
   flex-direction: column;

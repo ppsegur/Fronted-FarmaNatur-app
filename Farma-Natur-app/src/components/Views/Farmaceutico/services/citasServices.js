@@ -50,14 +50,15 @@ export const updateCita = async (cita, data) => {
 //FUNCION PARA OBTENER EL NOMBRE DEL FARMACEUTICO CON MAS CITAS 
 export const getFarmaceuticoConMasCitas = async () => {
   const token = localStorage.getItem('token');
-
+localStorage.getItem('token')
   if (!token) {
     console.error('No hay token disponible');
     window.location.href = '/login';
     return Promise.reject(new Error('No hay token disponible'));
   }
 
-  return axios.get(`${API_URL}/farmaceutico-mas-citas`, {
+  return axios.get(`${API_URL}/top-farmaceutico`, {
+    
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -76,7 +77,7 @@ export const getClienteConMasCitas = async () => {
     return Promise.reject(new Error('No hay token disponible'));
   }
 
-  return axios.get(`${API_URL}/cliente-mas-citas`, {
+  return axios.get(`${API_URL}/top-cliente`, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
@@ -84,4 +85,31 @@ export const getClienteConMasCitas = async () => {
   });
 };
 
+export const getNumeroDeCitasFarmaceutico = async (username) => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = '/login';
+    return Promise.reject(new Error('No hay token disponible'));
+  }
+  return axios.get(`${API_URL}/numero-citas-farmaceutico/${username}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
+export const getNumeroDeCitasCliente = async (username) => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    window.location.href = '/login';
+    return Promise.reject(new Error('No hay token disponible'));
+  }
+  return axios.get(`${API_URL}/numero-citas-cliente/${username}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+};
 
