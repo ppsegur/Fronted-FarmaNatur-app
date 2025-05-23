@@ -3,13 +3,14 @@ import { ref } from 'vue';
 import { onMounted } from 'vue';
 import { jwtDecode } from 'jwt-decode';
 import FarmaHeader from '@/components/MicroComponents/Farmaceutico/FarmaHeader.vue';
-import CitasTabla from '../Citas/CitasTabla.vue';
 const userName = ref('');
 const userRole = ref('');
 
 // Importaciones de las cards 
 import CitasCardClienteMas from '../Citas/CitasCardClienteMas.vue';
 import CitasCardFarmaMas from '../Citas/CitasCardFarmaMas.vue';
+import CitasMessage from '../messages/CitasMessage.vue';
+import CitasTabla from '../Citas/CitasTabla.vue';
 
 
 onMounted(() => {
@@ -27,9 +28,17 @@ onMounted(() => {
 <br><br>
 <br><br>
 <br><br>
+<br><br>
+<br><br>
+<br><br>
+<br><br>
   <div class="dashboard-container" style="padding-top: 150px;">
-    <h1 class="dashboard-title">Gestión de Citas</h1>
+    <h1 class="dashboard-title" style="padding-left:20px ;">Gestión de Citas</h1>
+    <br>
+    <CitasMessage />
+    <br>
     <hr style="border: 1px solid #ccc; width: 100%;" />
+    <br>
     <div class="citas-card"> 
     <CitasCardClienteMas />
     <CitasCardFarmaMas />
@@ -43,7 +52,8 @@ onMounted(() => {
 
 <style scoped>
 .dashboard-container {
-  margin-top:20px
+  margin-top:20px;
+
 }
 .dashboard-tabla {
    background: #fff;
@@ -66,6 +76,7 @@ onMounted(() => {
 .citas-card {
   display: flex;
   flex-direction: row;
+  margin-left: 30px;
   gap: 24px;
   justify-content: center;
   align-items: flex-start;

@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h2 class="text-xl font-bold mb-4 text-green-700">Listado de Citas</h2>
+    <h2 class="text-xl font-bold mb-4 text-green-700" style="padding-top:10px">Listado de Citas</h2>
+    <br>
     <table class="table-auto border-collapse w-full border border-gray-300 bg-gray-50">
       <thead class="bg-green-100">
         <tr>
@@ -21,7 +22,7 @@
           :key="cita.tittle + cita.fecha_inicio"
           :class="['transition-colors', 'duration-200', turnoClase(obtenerTurno(cita.fecha_inicio))]"
         >
-          <td class="border border-gray-300 px-6 py-2">{{ cita.tittle }}</td>
+          <td class="border border-gray-300 px-6 py-2">{{ cita.titulo }}</td>
           <td class="border border-gray-300 px-4 py-2">{{ cita.usernameFarma?.username }}</td>
           <td class="border border-gray-300 px-4 py-2">{{ cita.usernameCliente?.username }}</td>
           <td class="border border-gray-300 px-6 py-2 min-w-[140px]">{{ cita.fecha_inicio.slice(0, 10) }}</td>
@@ -240,7 +241,7 @@ const guardarCitaEditada = async () => {
     await updateCita(
       { clienteId, farmaceuticoId, fecha_inicio: fechaInicio },
       {
-        tittle: citaSeleccionada.value.titulo,
+        titulo: citaSeleccionada.value.titulo,
         usernameFarma: { id: farmaceuticoResp.data.id }, 
         usernameCliente: { id: clienteResp.data.id },    
         precio: citaSeleccionada.value.precio,
