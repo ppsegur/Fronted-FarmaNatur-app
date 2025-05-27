@@ -113,3 +113,43 @@ export const getNumeroDeCitasCliente = async (username) => {
   });
 };
 
+
+
+//Funcion para obtener la madia de citas por dia 
+export const getMediaCitasPorDia = async () => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    console.error('No hay token disponible');
+    window.location.href = '/login';
+    return Promise.reject(new Error('No hay token disponible'));
+  }
+
+  return axios.get(`${API_URL}/media/dia`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+}
+
+
+
+// Funcion para obtener la media de citas por mes
+export const getMediaCitasPorMes = async () => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    console.error('No hay token disponible');
+    window.location.href = '/login';
+    return Promise.reject(new Error('No hay token disponible'));
+  }
+
+  return axios.get(`${API_URL}/media/mes`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+}
+
