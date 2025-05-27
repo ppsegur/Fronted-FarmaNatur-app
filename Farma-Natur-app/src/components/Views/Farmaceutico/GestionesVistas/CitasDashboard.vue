@@ -11,6 +11,8 @@ import CitasCardClienteMas from '../Citas/CitasCardClienteMas.vue';
 import CitasCardFarmaMas from '../Citas/CitasCardFarmaMas.vue';
 import CitasMessage from '../messages/CitasMessage.vue';
 import CitasTabla from '../Citas/CitasTabla.vue';
+import CitasDiaCard from '../Citas/CitasDiaCard.vue';
+import CitasMesCard from '../Citas/CitasMesCard.vue';
 
 
 onMounted(() => {
@@ -42,6 +44,8 @@ onMounted(() => {
     <div class="citas-card"> 
     <CitasCardClienteMas />
     <CitasCardFarmaMas />
+    <CitasDiaCard />
+    <CitasMesCard />
     </div>
     <br>
     <div class="dashboard-tabla">
