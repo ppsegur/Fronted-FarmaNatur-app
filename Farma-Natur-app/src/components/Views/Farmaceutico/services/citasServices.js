@@ -153,3 +153,21 @@ export const getMediaCitasPorMes = async () => {
   });
 }
 
+//FUNCION PARA CREAR UNA CITA
+export const createCita = async (cita) => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    console.error('No hay token disponible');
+    window.location.href = '/login';
+    return Promise.reject(new Error('No hay token disponible'));
+  }
+
+  return axios.post(`${API_URL}/crear`, cita, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+};
+

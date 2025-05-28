@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { onMounted } from 'vue';
 import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 import FarmaHeader from '@/components/MicroComponents/Farmaceutico/FarmaHeader.vue';
 const userName = ref('');
 const userRole = ref('');
@@ -13,16 +14,53 @@ import CitasMessage from '../messages/CitasMessage.vue';
 import CitasTabla from '../Citas/CitasTabla.vue';
 import CitasDiaCard from '../Citas/CitasDiaCard.vue';
 import CitasMesCard from '../Citas/CitasMesCard.vue';
+import CardCrearCita from '../Citas/CardCrearCita.vue';
+import CitasModalCrear from '../Citas/CitasModalCrear.vue';
+import { createCita } from '../services/citasServices.js';
 
 
-onMounted(() => {
+
+
+
+/// CREAR CITAS
+const showCrearCitaModal = ref(false);
+const createMsg = ref('');
+
+
+const farmaceuticos = ref([]);
+const clientes = ref([]);
+
+onMounted(async () => {
   const token = localStorage.getItem('token');
-  if (token) {
+   if (token) {
     const decoded = jwtDecode(token);
     userName.value = decoded.name || decoded.username || 'USERNAME';
     userRole.value = decoded.role || 'FARMACEUTICO';
+  
+  const res = await axios.get('http://localhost:8080/auth/todos', {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  const usuarios = res.data;
+  farmaceuticos.value = usuarios.filter(u => u.role === 'FARMACEUTICO');
+  clientes.value = usuarios.filter(u => u.role === 'CLIENTE');
+}
+async function crearCitaHandler(formData) {
+  createMsg.value = '';
+  try {
+    await createCita(formData);
+    console.log('Cita creada:', formData);
+    createMsg.value = '¡Cita creada con éxito!';
+    showCrearCitaModal.value = false; // <--- CORRECTO
+    // Actualiza la tabla si quieres
+  } catch (e) {
+    createMsg.value = 'Error al crear la cita';
   }
-});
+}
+}
+
+
+);
+
 </script>
 
 <template>
@@ -41,12 +79,26 @@ onMounted(() => {
     <br>
     <hr style="border: 1px solid #ccc; width: 100%;" />
     <br>
-    <transition-group name="card" tag="div" class="citas-card">
+    <div class="citas-card">
+    <transition-group name="card"  >
   <CitasCardClienteMas key="card1" />
   <CitasCardFarmaMas key="card2" />
   <CitasDiaCard key="card3" />
   <CitasMesCard key="card4" />
+  
 </transition-group>
+
+  <CardCrearCita @abrir-modal="showCrearCitaModal = true" />
+
+</div>
+<CitasModalCrear
+  :show="showCrearCitaModal"
+  :farmaceuticos="farmaceuticos"
+  :clientes="clientes"
+  :msg="createMsg"
+  @cerrar="showCrearCitaModal = false"
+  @crear="crearCitaHandler"
+/>
 
     <br>
     <div class="dashboard-tabla">
