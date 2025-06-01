@@ -5,23 +5,28 @@
         <div class="modal-title" style="color:#1976d2;">Crear nueva cita</div>
         <form @submit.prevent="emitirCrearCita">
           <div class="formField">
-            <input v-model="form.titulo" maxlength="100" required />
-            <span>Título</span>
-          </div>
+  <label for="titulo">Tipo de cita</label>
+  <select id="titulo" v-model="form.titulo" required>
+    <option value="" disabled>Selecciona tipo</option>
+    <option value="basica">Básica</option>
+    <option value="general">General</option>
+    <option value="terapia">Terapia</option>
+  </select>
+</div>
           <div class="formField">
-            <select v-model="form.usernameFarma" required>
-              <option value="" disabled>Selecciona</option>
-              <option v-for="f in farmaceuticos" :key="f.username" :value="f.username">
-                {{ f.nombre || f.username }}
-              </option>
-            </select>
+          <select v-model="form.usernameFarma" required>
+            <option value="" disabled>Selecciona</option>
+            <option v-for="f in props.farmaceuticos" :key="f.username" :value="f.username">
+              {{ f.username }}
+            </option>
+          </select>
             <span>Farmacéutico</span>
           </div>
           <div class="formField">
             <select v-model="form.usernameCliente" required>
               <option value="" disabled>Selecciona</option>
-              <option v-for="c in clientes" :key="c.username" :value="c.username">
-                {{ c.nombre || c.username }}
+              <option v-for="c in props.clientes" :key="c.username" :value="c.username">
+                {{  c.username }}
               </option>
             </select>
             <span>Cliente</span>
@@ -44,6 +49,7 @@
             <input type="datetime-local" v-model="form.fecha_fin" required />
             <span>Fecha fin</span>
           </div>
+       
           <div class="modal-actions">
             <button type="button" class="c-button c-button--gooey-gray" @click="$emit('cerrar')">
               Cancelar
@@ -65,13 +71,27 @@
 import { ref, watch, defineProps, defineEmits } from 'vue';
 
 const props = defineProps({
+
+   farmaceuticos: {
+    type: Array,
+    default: () => []  
+  },
+  clientes: {
+    type: Array,
+    default: () => []  
+  },
   show: Boolean,
-  farmaceuticos: Array,
-  clientes: Array,
+ 
   msg: String
 });
 const emit = defineEmits(['cerrar', 'crear']);
 
+watch(() => props.farmaceuticos, (newVal) => {
+  console.log('Farmacéuticos en modal:', newVal);
+}, { immediate: true });
+watch(() => props.clientes, (newVal) => {
+  console.log('Clientes en modal:', newVal);
+}, { immediate: true });
 const form = ref({
   titulo: '',
   usernameFarma: '',
@@ -79,12 +99,24 @@ const form = ref({
   precio: 0,
   oferta: false,
   fecha_inicio: '',
-  fecha_fin: ''
+  fecha_fin: '',
+  tipo: ''
 });
-
 function emitirCrearCita() {
-  emit('crear', { ...form.value });
+  emit('crear', {
+    fecha_inicio: form.value.fecha_inicio, 
+    usernameFarma: { username: form.value.usernameFarma},
+    usernameCliente: { username: form.value.usernameCliente },
+    titulo: form.value.titulo,
+    precio: form.value.precio,
+    oferta: form.value.oferta,
+    fecha_fin: form.value.fecha_fin,
+    usernameFarma: { username: form.value.usernameFarma},
+    usernameCliente: { username: form.value.usernameCliente },
+    
+  });
 }
+
 watch(() => props.show, (val) => {
   if (!val) {
     // Limpiar formulario al cerrar

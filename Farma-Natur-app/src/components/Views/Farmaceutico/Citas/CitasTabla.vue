@@ -25,11 +25,18 @@
           <td class="border border-gray-300 px-6 py-2">{{ cita.titulo }}</td>
           <td class="border border-gray-300 px-4 py-2">{{ cita.usernameFarma?.username }}</td>
           <td class="border border-gray-300 px-4 py-2">{{ cita.usernameCliente?.username }}</td>
-          <td class="border border-gray-300 px-6 py-2 min-w-[140px]">{{ cita.fecha_inicio.slice(0, 10) }}</td>
-          <td class="border border-gray-300 px-6 py-2 min-w-[100px]">{{ cita.fecha_inicio.slice(11, 16) }}</td>
+  <td class="border border-gray-300 px-6 py-2 min-w-[140px]">
+  {{ cita.fecha_inicio ? cita.fecha_inicio.slice(0, 10) : '' }}
+</td>
+<td class="border border-gray-300 px-6 py-2 min-w-[100px]">
+  {{ cita.fecha_inicio ? cita.fecha_inicio.slice(11, 16) : '' }}
+</td>
+
           <td class="border border-gray-300 px-4 py-2">{{ cita.precio }}</td>
           <td class="border border-gray-300 px-4 py-2">{{ cita.oferta }}</td>
-          <td class="border border-gray-300 px-4 py-2">{{ obtenerTurno(cita.fecha_inicio) }}</td>
+          <td class="border border-gray-300 px-4 py-2">
+  {{ obtenerTurno(cita.fecha_inicio) }}
+</td>
           <td class="border border-gray-300 px-4 py-2 flex justify-center gap-2">
             <IconButton
               tooltip="Editar"
@@ -197,8 +204,13 @@ const cargarCitas = async () => {
   }
 };
 
+
+
+
 function obtenerTurno(fecha) {
+  if (!fecha || typeof fecha !== 'string') return '';
   const hora = parseInt(fecha.slice(11, 13));
+  if (isNaN(hora)) return '';
   if (hora >= 6 && hora < 14) return 'Mañana';
   if (hora >= 14 && hora < 20) return 'Tarde';
   return 'Noche';
@@ -278,6 +290,11 @@ const confirmarEliminarCita = async () => {
     console.error("Error al eliminar la cita:", error);
   }
 };
+
+// Para recargar las citas en la tabla al crear una 
+defineExpose({
+  refreshData: cargarCitas
+});
 
 onMounted(() => {
   cargarCitas();
