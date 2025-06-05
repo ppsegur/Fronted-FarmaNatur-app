@@ -1,6 +1,6 @@
-// src/components/services/authServices.js
 import axios from 'axios'
-import { jwtDecode } from 'jwt-decode'  // ✅ CORRECTO
+import { jwtDecode } from 'jwt-decode' 
+
 
 
 const API_URL = 'http://localhost:8080/auth'

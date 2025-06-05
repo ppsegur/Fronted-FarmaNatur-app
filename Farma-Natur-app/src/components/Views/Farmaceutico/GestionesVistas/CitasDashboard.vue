@@ -2,57 +2,131 @@
 import { ref } from 'vue';
 import { onMounted } from 'vue';
 import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 import FarmaHeader from '@/components/MicroComponents/Farmaceutico/FarmaHeader.vue';
+
+// Datos de usuario
 const userName = ref('');
 const userRole = ref('');
 
-// Importaciones de las cards 
+// Componentes
 import CitasCardClienteMas from '../Citas/CitasCardClienteMas.vue';
 import CitasCardFarmaMas from '../Citas/CitasCardFarmaMas.vue';
 import CitasMessage from '../messages/CitasMessage.vue';
 import CitasTabla from '../Citas/CitasTabla.vue';
 import CitasDiaCard from '../Citas/CitasDiaCard.vue';
 import CitasMesCard from '../Citas/CitasMesCard.vue';
+import CardCrearCita from '../Citas/CardCrearCita.vue';
+import CitasModalCrear from '../Citas/CitasModalCrear.vue';
+import { createCita } from '../services/citasServices.js';
 
+// Estado del modal
+const showCrearCitaModal = ref(false);
+const createMsg = ref('');
 
-onMounted(() => {
+// Datos para el modal
+const farmaceuticos = ref([]);
+const clientes = ref([]);
+const citasTablaRef = ref(null);
+
+// Cargar datos al montar el componente
+onMounted(async () => {
   const token = localStorage.getItem('token');
-  if (token) {
+  if (!token) return;
+  
+  try {
     const decoded = jwtDecode(token);
     userName.value = decoded.name || decoded.username || 'USERNAME';
     userRole.value = decoded.role || 'FARMACEUTICO';
+  
+    const res = await axios.get('http://localhost:8080/auth/todos', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    
+    // Filtrar correctamente por roles
+    const usuarios = res.data;
+    farmaceuticos.value = usuarios
+      .filter(u => u.role === 'FARMACEUTICO')
+      .map(f => ({
+        username: f.username,
+        nombre: f.nombre || f.username
+      }));
+      
+    clientes.value = usuarios
+      .filter(u => u.role === 'CLIENTE')
+      .map(c => ({
+        username: c.username,
+        nombre: c.nombre || c.username
+      }));
+
+    console.log('Usuarios filtrados:', {
+      farmaceuticos: farmaceuticos.value,
+      clientes: clientes.value
+    });
+  } catch (error) {
+    console.error('Error al cargar usuarios:', error);
   }
 });
-</script>
 
+// Manejar creación de cita
+async function crearCitaHandler(formData) {
+  createMsg.value = '';
+  try {
+    console.log('Enviando datos:', formData); 
+    await createCita(formData);
+    createMsg.value = '¡Cita creada con éxito!';
+    showCrearCitaModal.value = false;
+    
+    if (citasTablaRef.value) {
+      citasTablaRef.value.refreshData();
+    }
+  } catch (e) {
+    console.error('Detalles del error:', {
+      message: e.message,
+      response: e.response?.data,
+      request: e.config?.data
+    });
+    createMsg.value = `Error al crear cita: ${e.response?.data?.message || e.message}`;
+  }
+}
+
+</script>
 <template>
-        <FarmaHeader :userName="userName" :userRole="userRole" />
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
-<br><br>
+  <FarmaHeader :userName="userName" :userRole="userRole" />
+  <br><br> <br>
+  <br><br> <br>
+  <br><br> <br>
+  <br><br> <br> 
+  <br><br> <br>
   <div class="dashboard-container" style="padding-top: 150px;">
-    <h1 class="dashboard-title" style="padding-left:20px ;">Gestión de Citas</h1>
+    <h1 class="dashboard-title" style="padding-left:20px;">Gestión de Citas</h1>
     <br>
     <CitasMessage />
     <br>
     <hr style="border: 1px solid #ccc; width: 100%;" />
     <br>
-    <transition-group name="card" tag="div" class="citas-card">
-  <CitasCardClienteMas key="card1" />
-  <CitasCardFarmaMas key="card2" />
-  <CitasDiaCard key="card3" />
-  <CitasMesCard key="card4" />
-</transition-group>
-
+    <div class="citas-card">
+      <transition-group name="card">
+        <CitasCardClienteMas key="card1" />
+        <CitasCardFarmaMas key="card2" />
+        <CitasDiaCard key="card3" />
+        <CitasMesCard key="card4" />
+      </transition-group>
+      <CardCrearCita @abrir-modal="showCrearCitaModal = true" />
+    </div>
+    <CitasModalCrear
+  :show="showCrearCitaModal"
+  :farmaceuticos="farmaceuticos"
+  :clientes="clientes"
+  :msg="createMsg"
+  @cerrar="showCrearCitaModal = false"
+  @crear="crearCitaHandler"
+/>
     <br>
     <div class="dashboard-tabla">
-    <CitasTabla />
+      <CitasTabla ref="citasTablaRef" />
     </div>
-    </div>
+  </div>
 </template>
 
 <style scoped>

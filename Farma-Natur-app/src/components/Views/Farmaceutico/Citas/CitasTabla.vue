@@ -7,30 +7,40 @@
         <tr>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Titulo</th>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Farmaceutico</th>
-          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Paciente</th>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Fecha</th>
-          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Hora</th>
+          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Paciente</th>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Precio</th>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Oferta</th>
-          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Turno</th>
           <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Acciones</th>
         </tr>
       </thead>
       <tbody>
-        <tr
-          v-for="cita in citas"
-          :key="cita.tittle + cita.fecha_inicio"
-          :class="['transition-colors', 'duration-200', turnoClase(obtenerTurno(cita.fecha_inicio))]"
-        >
-          <td class="border border-gray-300 px-6 py-2">{{ cita.titulo }}</td>
+<tr
+  v-for="cita in citas"
+  :key="[
+    cita.usernameFarma?.username || 'farmacia',
+    cita.usernameCliente?.username || 'cliente',
+    cita.fecha_inicio || Math.random()
+  ].join('-')"
+>          <td class="border border-gray-300 px-6 py-2">{{ cita.titulo }}</td>
           <td class="border border-gray-300 px-4 py-2">{{ cita.usernameFarma?.username }}</td>
+            <td class="border border-gray-300 px-4 py-2">
+            {{ cita.fechaInicio ? (new Date(cita.fechaInicio).toLocaleDateString() + ' ' + new Date(cita.fechaInicio).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) : 'Sin fecha' }}
+            </td>
+
           <td class="border border-gray-300 px-4 py-2">{{ cita.usernameCliente?.username }}</td>
-          <td class="border border-gray-300 px-6 py-2 min-w-[140px]">{{ cita.fecha_inicio.slice(0, 10) }}</td>
-          <td class="border border-gray-300 px-6 py-2 min-w-[100px]">{{ cita.fecha_inicio.slice(11, 16) }}</td>
+          
           <td class="border border-gray-300 px-4 py-2">{{ cita.precio }}</td>
           <td class="border border-gray-300 px-4 py-2">{{ cita.oferta }}</td>
-          <td class="border border-gray-300 px-4 py-2">{{ obtenerTurno(cita.fecha_inicio) }}</td>
           <td class="border border-gray-300 px-4 py-2 flex justify-center gap-2">
+        <IconButton
+            tooltip="Anular"
+            color="gray"
+            @click="abrirModalAnular(cita)"
+            v-if="!cita.anulada"
+          >
+            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6z"/>
+          </IconButton>
             <IconButton
               tooltip="Editar"
               color="blue"
@@ -40,13 +50,7 @@
                 d="M3 17.25V21h3.75l11.06-11.06-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
               />
             </IconButton>
-            <IconButton
-              tooltip="Eliminar"
-              color="red"
-              @click="abrirModalEliminar(cita)"
-            >
-              <path d="M16 9v10H8V9h8m-1.5-6h-5l-1 1H5v2h14V4h-4.5l-1-1z"/>
-            </IconButton>
+            
           </td>
         </tr>
       </tbody>
@@ -66,6 +70,7 @@
               <input type="datetime-local" v-model="citaSeleccionada.fecha_inicio" required />
               <span>Fecha Inicio</span>
             </div>
+
             <div class="formField">
               <input type="datetime-local" v-model="citaSeleccionada.fecha_fin" required />
               <span>Fecha Fin</span>
@@ -114,51 +119,7 @@
       </div>
     </Teleport>
 
-    <!-- Modal Eliminar -->
-    <Teleport to="body">
-      <div v-if="modalEliminarVisible" class="modal-overlay">
-        <div class="modal-box">
-          <img
-            src="../../../../assets/img/DeleteImageModal.png"
-            alt="Eliminar cita"
-          />
-          <div class="modal-title">Eliminar Cita</div>
-          <div class="modal-text">
-            ¿Estás seguro de que deseas eliminar la cita <strong>{{ citaAEliminar?.tittle }}</strong>?
-          </div>
-          <div class="modal-actions">
-            <button
-              type="button"
-              class="c-button c-button--gooey-gray"
-              @click="cerrarModalEliminar"
-            >
-              Cancelar
-              <div class="c-button__blobs">
-                <div></div>
-                <div></div>
-                <div></div>
-              </div>
-            </button>
-            <button
-              type="button"
-              class="c-button c-button--gooey-red"
-              @click="confirmarEliminarCita"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" class="mr-1">
-                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-              </svg>
-              Eliminar
-              <div class="c-button__blobs">
-                <div></div>
-                <div></div>
-                <div></div>
-              </div>
-            </button>
-          </div>
-        </div>
-      </div>
-    </Teleport>
+    
 
     <!-- SVG filter para el efecto gooey -->
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="display: block; height: 0; width: 0;">
@@ -176,40 +137,31 @@
 <script setup>
 import IconButton from '../botones/IconButton.vue';
 import { ref, onMounted } from 'vue';
-import { getCitas, deleteCita, updateCita } from '../services/citasServices.js';
+import { getCitas, updateCita, formatDateForBackend } from '../services/citasServices.js';
 import { getUsuarioByUsername } from '../services/usuariosServices.js';
 
 const citas = ref([]);
 const citaSeleccionada = ref(null);
 const modalEditarVisible = ref(false);
-const modalEliminarVisible = ref(false);
-const citaAEliminar = ref(null);
+const modalAnularVisible = ref(false);
+const citaAAnular = ref(null);
 
 const cargarCitas = async () => {
   try {
     const response = await getCitas();
+    console.log('Citas obtenidas:', response.data);
     citas.value = response.data.map(cita => ({
       ...cita,
-      titulo: cita.tittle || cita.titulo
+      titulo: cita.tittle || cita.titulo,
+      fechaInicio: cita.fechaInicio || null,
     }));
   } catch (error) {
     console.error('Error al obtener las citas:', error);
   }
 };
 
-function obtenerTurno(fecha) {
-  const hora = parseInt(fecha.slice(11, 13));
-  if (hora >= 6 && hora < 14) return 'Mañana';
-  if (hora >= 14 && hora < 20) return 'Tarde';
-  return 'Noche';
-}
 
-function turnoClase(turno) {
-  if (turno === 'Mañana') return 'hover-manana';
-  if (turno === 'Tarde') return 'hover-tarde';
-  if (turno === 'Noche') return 'hover-noche';
-  return '';
-}
+
 
 const cerrarModalEditar = () => {
   modalEditarVisible.value = false;
@@ -236,7 +188,7 @@ const guardarCitaEditada = async () => {
 
     const clienteId = clienteResp.data.id;
     const farmaceuticoId = farmaceuticoResp.data.id;
-    const fechaInicio = citaSeleccionada.value.fecha_inicio;
+    const fechaInicio = citaSeleccionada.value.fechaInicio;
 
     await updateCita(
       { clienteId, farmaceuticoId, fecha_inicio: fechaInicio },
@@ -246,7 +198,7 @@ const guardarCitaEditada = async () => {
         usernameCliente: { id: clienteResp.data.id },    
         precio: citaSeleccionada.value.precio,
         oferta: citaSeleccionada.value.oferta,
-        fecha_inicio: citaSeleccionada.value.fecha_inicio,
+        fecha_inicio: citaSeleccionada.value.fechaInicio,
         fecha_fin: citaSeleccionada.value.fecha_fin,
       }
     );
@@ -257,27 +209,12 @@ const guardarCitaEditada = async () => {
     console.error("Error actualizando cita:", error);
   }
 };
+// Métodos
 
-const abrirModalEliminar = (cita) => {
-  citaAEliminar.value = cita;
-  modalEliminarVisible.value = true;
-  modalEditarVisible.value = false;
-};
-
-const cerrarModalEliminar = () => {
-  modalEliminarVisible.value = false;
-  citaAEliminar.value = null;
-};
-
-const confirmarEliminarCita = async () => {
-  try {
-    await deleteCita(citaAEliminar.value.tittle);
-    await cargarCitas();
-    cerrarModalEliminar();
-  } catch (error) {
-    console.error("Error al eliminar la cita:", error);
-  }
-};
+// Para recargar las citas en la tabla al crear una 
+defineExpose({
+  refreshData: cargarCitas
+});
 
 onMounted(() => {
   cargarCitas();
@@ -322,16 +259,7 @@ td.flex {
   font-size: 0.875rem;
 }
 
-/* Hover por turno */
-.hover-manana:hover {
-  background-color: #fff9c4 !important;
-}
-.hover-tarde:hover {
-  background-color: #ffe0b2 !important;
-}
-.hover-noche:hover {
-  background-color: #c5cae9 !important;
-}
+
 
 /* Estilos para los modales */
 .modal-overlay {
@@ -546,5 +474,10 @@ td.flex {
 
 .c-button:hover .c-button__blobs div {
   transform: scale(1.4) translateY(0) translateZ(0);
+}
+tr.nula {
+  background-color: #f0f0f0;  
+  opacity: 0.7;
+  text-decoration: line-through;
 }
 </style>
