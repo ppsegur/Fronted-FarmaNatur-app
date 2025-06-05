@@ -21,13 +21,18 @@ export const getCitas = async () => {
 };
 
 // FUNCION PARA ELIMINAR UNA CITA
-export const deleteCita = async (titulo) => {
+export const deleteCita = async (clienteId, farmaceuticoId, fechaInicio) => {
   const token = localStorage.getItem('token');
-  return axios.delete(`http://localhost:8080/citas/${titulo}`, {
-    headers: { Authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json',
-    },
-  });
+  
+  // Formatear fecha para el backend (ej: asegurar 6 decimales en los segundos)
+  const fechaFormateada = formatDateForBackend(fechaInicio);
+
+  return axios.delete(
+    `${API_URL}/${clienteId}/${farmaceuticoId}/${fechaFormateada}`,
+    {
+      headers: { Authorization: `Bearer ${token}` }
+    }
+  );
 };
 // FUNCION PARA EDITAR UNA CITA
 export const updateCita = async (cita, data) => {
@@ -170,4 +175,25 @@ export const createCita = async (cita) => {
     },
   });
 };
-
+//FUNFIÖN PARA CANCELAR UNA CITA 
+// citasServices.js
+export const anularCita = async (clienteId, farmaceuticoId, fechaInicio, motivo) => {
+  const token = localStorage.getItem('token');
+  return axios.patch(
+    `${API_URL}/${clienteId}/${farmaceuticoId}/${fechaInicio}/anular`,
+    motivo,
+    { headers: { Authorization: `Bearer ${token}` } }
+  );
+};
+// Función auxiliar para formatear fecha
+export const formatDateForBackend = (dateString) => {
+  const date = new Date(dateString);
+  const isoString = date.toISOString(); // Ej: "2025-05-16T18:00:00.000Z"
+  
+  // Reemplazar 'Z' por '.000000' o mantener los decimales existentes
+  if (isoString.includes('.')) {
+    return isoString.replace('Z', '').padEnd(26, '0').substring(0, 26);
+  } else {
+    return isoString.replace('Z', '.000000');
+  }
+};
