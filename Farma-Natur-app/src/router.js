@@ -6,6 +6,8 @@ import AuthView from '@/components/auth/AuthView.vue'
 import DashboardView from '@/components/Views/dashboard.vue'
 import Verify from '@/components/auth/verify.vue'
 import HomeView from '@/components/Views/HomeView.vue'
+import CategoriaDashboard from '../src/components/Views/Farmaceutico/GestionesVistas/CategoriaDashboard.vue'
+import CitasDashboard from './components/Views/Farmaceutico/GestionesVistas/CitasDashboard.vue'
 import UserDashBoard from './components/Views/Farmaceutico/UserDashBoard.vue'
 
 const routes = [
@@ -37,7 +39,18 @@ const routes = [
       path:'/usuarios',
       component: UserDashBoard,
       meta: { requiresAuth: true,   role: 'ROLE_ADMIN' } 
+    },
+    {
+      path:'/categoria',
+      component: CategoriaDashboard,
+      meta: { requiresAuth: true, role: ['ADMIN', 'FARMACEUTICO'] }    
+    },
+    {
+      path: "/Citas",
+      component: CitasDashboard,
+      meta: { requiresAuth: true, role: ['ADMIN', 'FARMACEUTICO'] }
     }
+
  
 ]
 
@@ -45,32 +58,30 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
-
-// Protección de rutas
 router.beforeEach((to, _from, next) => {
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token');
 
   // Si no hay token y la ruta requiere autenticación, redirigir al login
   if (!token && to.meta.requiresAuth) {
-    return next('/login')
+    return next('/login');
   }
 
   if (token) {
-    const decoded = jwtDecode(token)
+    const decoded = jwtDecode(token);
 
     // Permitir acceso a /auth incluso si no está verificado
     if (!decoded.verified && to.path !== '/verify' && to.path !== '/auth') {
-      return next('/verify')
+      return next('/verify');
     }
 
     // Verificar roles si la ruta tiene un meta.role
-    if (to.meta.role && to.meta.role !== decoded.role) {
-      return next('/')
+    if (to.meta.role && !to.meta.role.includes(decoded.role)) {
+      return next('/'); // Redirigir al inicio si el rol no coincide
     }
   }
 
-  next()
-})
+  next();
+});
   
 
 export default router

@@ -33,17 +33,19 @@
   
   <style>
   .dashboard-container {
-    display: flex;
-    flex-direction: column;
-    height: 100vh; /* Full height of the viewport */
-    background-color: #f0f0f0; /* Light gray background */
-    overflow: hidden;
-  }
+  min-height: 100vh; /* Asegura que ocupe toda la altura de la ventana */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  background-color: #ffffff;
+  padding: 0;
+  width: 100% !important;
+}
   
   .dashboard-content {
     margin-top: 60px; /* Altura del header */
     padding: 20px;
     flex: 1;
-    overflow-y: auto;
   }
   </style>
