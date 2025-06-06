@@ -1,6 +1,20 @@
 <template>
   <div>
     <h2 class="text-xl font-bold mb-4 text-green-700" style="padding-top:10px">Listado de Usuarios</h2>
+    <div class="filtros-barra">
+  <input
+    v-model="busqueda"
+    type="text"
+    placeholder="Buscar por username, email o rol"
+    class="input-busqueda"
+  />
+  <select v-model="filtroRol" class="select-filtro">
+    <option value="">Todos los roles</option>
+    <option value="ADMIN">ADMIN</option>
+    <option value="FARMACEUTICO">FARMACEUTICO</option>
+    <option value="CLIENTE">CLIENTE</option>
+  </select>
+</div>
     <table class="table-auto border-collapse w-full border border-gray-300 bg-gray-50">
       <thead class="bg-green-100">
         <tr>
@@ -11,7 +25,7 @@
         </tr>
       </thead>
   <tbody>
-  <tr v-for="usuario in usuarios" :key="usuario.id">
+  <tr v-for="usuario in usuariosFiltrados" :key="usuario.id">
     <td class="border border-gray-300 px-4 py-2">{{ usuario.username }}</td>
     <td class="border border-gray-300 px-4 py-2">{{ usuario.role }}</td>
     <td class="border border-gray-300 px-4 py-2">{{ usuario.email }}</td>
@@ -109,7 +123,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted , computed} from 'vue';
 import IconButton from '../botones/IconButton.vue'; // Ajusta la ruta si es necesario
 import userServices from '../../../services/userServices';
 
@@ -195,7 +209,19 @@ const confirmarEditarUsuario = async () => {
     console.error(error);
   }
 };
+const busqueda = ref('');
+const filtroRol = ref('');
 
+const usuariosFiltrados = computed(() => {
+  return usuarios.value.filter(u => {
+    const coincideBusqueda =
+      u.username.toLowerCase().includes(busqueda.value.toLowerCase()) ||
+      u.email.toLowerCase().includes(busqueda.value.toLowerCase()) ||
+      u.role.toLowerCase().includes(busqueda.value.toLowerCase());
+    const coincideRol = filtroRol.value === '' || u.email === filtroRol.value;
+    return coincideBusqueda && coincideRol;
+  });
+});
 onMounted(() => {
   cargarUsuarios();
 });
@@ -380,5 +406,44 @@ tr:hover {
   padding: 0.5rem;
   border-radius: 6px;
   border: 1px solid #cbd5e1;
+}
+
+.filtros-barra {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.input-busqueda {
+  border: 1.5px solid #a7f3d0;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  width: 260px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+  background: #f6fff8;
+}
+
+.input-busqueda:focus {
+  border-color: #38b2ac;
+  background: #e6fffa;
+}
+
+.select-filtro {
+  border: 1.5px solid #a7f3d0;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  background: #f6fff8;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.select-filtro:focus {
+  border-color: #38b2ac;
+  background: #e6fffa;
 }
 </style>

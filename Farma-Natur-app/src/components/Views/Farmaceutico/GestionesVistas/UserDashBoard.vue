@@ -20,7 +20,11 @@ onMounted(() => {
 
 <template>
   <FarmaHeader :userName="userName" :userRole="userRole" />
+    <br />
+    <br />  
 
+    <br />
+    <br />
   <div class="dashboard-container">
     <h1 class="dashboard-title">Gestión de Usuarios</h1>
     <div style="display: flex; flex-direction: row; align-items: flex-start; padding-left:50px;">
