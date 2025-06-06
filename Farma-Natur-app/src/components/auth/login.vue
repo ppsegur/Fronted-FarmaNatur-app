@@ -191,9 +191,6 @@ import authService from '../services/authServices'
 const router = useRouter()
 const username = ref('')
 const password = ref('')
-const focusUsername = ref(false)
-const focusPassword = ref(false)
-const showErrorModal = ref(false)
 const errorMessage = ref('')
 
 const handleLogin = async () => {
@@ -212,7 +209,9 @@ const handleLogin = async () => {
     if ( decoded.role === 'CLIENTE') {
       router.push('/home')
     } else if ( decoded.role === 'FARMACEUTICO') {
-      router.push('/dashboard')
+      router.push('/DASHBOARD')
+    } else if ( decoded.role === 'ADMIN') {
+      router.push('/DASHBOARD')
     } else {
       router.push('/home') // fallback
     }

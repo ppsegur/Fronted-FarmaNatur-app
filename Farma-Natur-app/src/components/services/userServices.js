@@ -47,12 +47,7 @@ export const getAllUsuarios = async () => {
     const response = await axios.get(`${API_URL}/auth/todos`, {
       headers: {
         Authorization: `Bearer ${token}`,
-        "Accept" : "application/json",
-        "Access-Control-Allow-Origin" : "*",
-        "Access-Control-Allow-Methods" : "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers" : "Content-Type, Authorization",
-        "Content-Type" : "application/json",
-         
+        'Content-Type': 'application/json',
       },
     });
     return response.data;
@@ -94,7 +89,8 @@ const editUsuario = (username, data) => {
   
   return axios.put(`${API_URL}/auth/${username}`, data, {
     headers: {
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
     },
   });
 };
