@@ -76,9 +76,9 @@ const closeNavBar = () => {
           </router-link>
         </li>
         <li>
-          <router-link to="/configuracion" class="nav-link" @click="closeNavBar">
-            <i class="pi pi-cog nav-icon"></i>
-            <span class="nav-text">Configuración</span>
+          <router-link to="/Comentarios" class="nav-link" @click="closeNavBar">
+            <i class="pi pi-coment nav-icon"></i>
+            <span class="nav-text">Comentarios</span>
             <i class="pi pi-chevron-right arrow-icon"></i>
           </router-link>
         </li>
