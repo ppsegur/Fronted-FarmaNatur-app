@@ -4,10 +4,12 @@
     <table class="table-auto border-collapse w-full border border-gray-300 bg-gray-50">
       <thead class="bg-green-100">
         <tr>
-          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">ID</th>
-          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Contenido</th>
-          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Autor</th>
-          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Fecha</th>
+          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Comentario</th>
+          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Producto</th>
+          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Categoría</th>
+          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Cliente</th>
+          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Precio</th>
+          <th class="border border-gray-300 px-4 py-2 text-left text-green-700">Stock</th>
         </tr>
       </thead>
       <tbody>
@@ -16,10 +18,12 @@
           :key="comentario.id"
           class="hover:bg-green-200 transition-colors duration-200"
         >
-          <td class="border border-gray-300 px-4 py-2">{{ comentario.id }}</td>
-          <td class="border border-gray-300 px-4 py-2">{{ comentario.contenido }}</td>
-          <td class="border border-gray-300 px-4 py-2">{{ comentario.autor?.username || comentario.cliente?.username || 'Desconocido' }}</td>
-          <td class="border border-gray-300 px-4 py-2">{{ comentario.fecha ? new Date(comentario.fecha).toLocaleString() : '' }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ comentario.comentario }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ comentario.producto?.nombre }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ comentario.producto?.categoria?.nombre }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ comentario.cliente?.username }}</td>
+          <td class="border border-gray-300 px-4 py-2">{{ comentario.producto?.precio }} €</td>
+          <td class="border border-gray-300 px-4 py-2">{{ comentario.producto?.stock }}</td>
         </tr>
       </tbody>
     </table>
@@ -34,7 +38,7 @@ const comentarios = ref([]);
 
 onMounted(async () => {
   try {
-    comentarios.value = await getAllComentarios(0, 50); // Puedes ajustar el tamaño
+    comentarios.value = await getAllComentarios(0, 50);
   } catch (error) {
     console.error("Error al obtener comentarios:", error);
   }
