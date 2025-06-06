@@ -8,20 +8,22 @@ import Verify from '@/components/auth/verify.vue'
 import HomeView from '@/components/Views/HomeView.vue'
 import CategoriaDashboard from '../src/components/Views/Farmaceutico/GestionesVistas/CategoriaDashboard.vue'
 import CitasDashboard from './components/Views/Farmaceutico/GestionesVistas/CitasDashboard.vue'
-
+import UserDashBoard from './components/Views/Farmaceutico/GestionesVistas/UserDashBoard.vue'
 const routes = [
   {
     path: '/',
     redirect: '/auth'
   },
   {
-    path: '/auth',
+    path: '/auth' ,
     component: AuthView
   },
   {
     path: '/dashboard',
     component: DashboardView,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true , 
+      role: 'ROLE_ADMIN' }, // Solo accesible para farmaceuticos
+    
   },
     {
         path: '/verify',
@@ -31,6 +33,11 @@ const routes = [
         path:'/home',
         component: HomeView,  
         meta: { requiresAuth: false }
+    },
+    {
+      path:'/usuarios',
+      component: UserDashBoard,
+      meta: { requiresAuth: true,   role: ['ADMIN', 'FARMACEUTICO'] } // Solo accesible para farmaceuticos
     },
     {
       path:'/categoria',

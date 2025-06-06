@@ -132,6 +132,7 @@ async function crearCitaHandler(formData) {
 <style scoped>
 .dashboard-container {
   margin-top:20px;
+  background-color: #f3f4f6; /* Color de fondo gris claro */
 
 }
 .dashboard-tabla {
