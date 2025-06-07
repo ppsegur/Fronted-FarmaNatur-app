@@ -164,4 +164,48 @@ tr:hover {
   max-width: 500px;
   text-align: center;
 }
+.dialog-content button {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.75rem 2.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s,
+    transform 0.15s;
+  box-shadow: 0 2px 8px #0001;
+  outline: none;
+  margin: 0 0.2rem;
+}
+
+.dialog-content button:active {
+  transform: scale(0.97);
+}
+
+.dialog-content .bg-gray-200 {
+  background: #f3f4f6;
+  color: #222;
+  border: 2px solid #bdbdbd;
+}
+
+.dialog-content .bg-gray-200:hover {
+  background: #e5e7eb;
+  color: #111;
+  border-color: #22c55e;
+}
+
+.dialog-content .bg-red-600 {
+  background: linear-gradient(90deg, #dc2626 60%, #ef4444 100%);
+  color: #fff;
+  border: 2px solid #dc2626;
+}
+
+.dialog-content .bg-red-600:hover {
+  background: linear-gradient(90deg, #b91c1c 60%, #dc2626 100%);
+  color: #fff;
+  border-color: #b91c1c;
+}
 </style>
