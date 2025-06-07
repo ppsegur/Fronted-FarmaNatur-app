@@ -79,3 +79,19 @@ export const contarProductosPorCategoria = async () => {
     },
   });
 };
+
+// Fnución para crear una nueva categoría
+export const crearCategoria = async (data) => {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    console.error('No hay token disponible');
+    window.location.href = '/login';
+    return Promise.reject(new Error('No hay token disponible'));
+  }
+  return axios.post('http://localhost:8080/categoria', data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+  });
+};

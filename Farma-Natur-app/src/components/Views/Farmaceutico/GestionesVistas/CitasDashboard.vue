@@ -46,14 +46,14 @@ onMounted(async () => {
     // Filtrar correctamente por roles
     const usuarios = res.data;
     farmaceuticos.value = usuarios
-      .filter(u => u.role === 'FARMACEUTICO')
+      .filter(u => u.email === 'FARMACEUTICO')
       .map(f => ({
         username: f.username,
         nombre: f.nombre || f.username
       }));
       
     clientes.value = usuarios
-      .filter(u => u.role === 'CLIENTE')
+      .filter(u => u.email === 'CLIENTE')
       .map(c => ({
         username: c.username,
         nombre: c.nombre || c.username

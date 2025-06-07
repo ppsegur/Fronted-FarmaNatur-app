@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-// No necesitas lógica aquí, solo el evento
+
 </script>
 
 <style scoped>
