@@ -1,6 +1,32 @@
 <template>
   <div>
     <h2 class="text-xl font-bold mb-4 text-green-700">Listado de Comentarios</h2>
+    <!-- Buscar y filtro de comentarios -->
+    <div class="filtros-barra mb-4 flex gap-4 items-center">
+      <input
+        v-model="busqueda"
+        type="text"
+        placeholder="Buscar comentario..."
+        class="input-busqueda"
+      />
+      <select v-model="filtroCliente" class="select-filtro">
+        <option value="">Todos los clientes</option>
+        <option
+          v-for="cliente in clientesUnicos"
+          :key="cliente"
+          :value="cliente"
+        >{{ cliente }}</option>
+      </select>
+      <select v-model="filtroProducto" class="select-filtro">
+        <option value="">Todos los productos</option>
+        <option
+          v-for="producto in productosUnicos"
+          :key="producto"
+          :value="producto"
+        >{{ producto }}</option>
+      </select>
+    </div>
+
     <table class="table-auto border-collapse w-full border border-gray-300 bg-gray-50">
       <thead class="bg-green-100">
         <tr>
@@ -15,7 +41,7 @@
       </thead>
       <tbody>
         <tr
-          v-for="comentario in comentarios"
+          v-for="comentario in comentariosFiltrados"
           :key="comentario.id"
           class="hover:bg-green-200 transition-colors duration-200"
         >
@@ -38,6 +64,7 @@
       </tbody>
     </table>
 
+    <!-- Modal de confirmación de eliminación -->
     <dialog ref="dialogEliminar" class="dialog-eliminar">
       <div class="dialog-content">
         <h3 class="text-red-600 font-bold text-xl mb-2">¿Eliminar comentario?</h3>
@@ -64,7 +91,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import IconButton from '../botones/IconButton.vue';
 import { getAllComentarios, deleteComentario } from '../services/comentarioServices.js';
 
@@ -93,10 +120,34 @@ const confirmarEliminarComentario = async () => {
   }
 };
 
+const busqueda = ref('');
+const filtroCliente = ref('');
+const filtroProducto = ref('');
+
+// Computados para los select únicos
+const clientesUnicos = computed(() =>
+  [...new Set(comentarios.value.map(c => c.cliente?.username || ''))].filter(Boolean)
+);
+const productosUnicos = computed(() =>
+  [...new Set(comentarios.value.map(c => c.producto?.nombre || ''))].filter(Boolean)
+);
+
+// Computado para filtrar comentarios
+const comentariosFiltrados = computed(() => {
+  return comentarios.value.filter(c => {
+    const coincideBusqueda =
+      (c.comentario || '').toLowerCase().includes(busqueda.value.toLowerCase()) ||
+      (c.cliente?.username || '').toLowerCase().includes(busqueda.value.toLowerCase()) ||
+      (c.producto?.nombre || '').toLowerCase().includes(busqueda.value.toLowerCase());
+    const coincideCliente = !filtroCliente.value || (c.cliente?.username === filtroCliente.value);
+    const coincideProducto = !filtroProducto.value || (c.producto?.nombre === filtroProducto.value);
+    return coincideBusqueda && coincideCliente && coincideProducto;
+  });
+});
+
 onMounted(async () => {
   try {
     comentarios.value = await getAllComentarios(0, 50);
-    console.log("Comentarios obtenidos:", comentarios.value);
   } catch (error) {
     console.error("Error al obtener comentarios:", error);
   }
@@ -167,7 +218,7 @@ tr:hover {
 .dialog-content button {
   font-size: 1rem;
   font-weight: 600;
-  padding: 0.75rem 2.2rem;
+  padding: 0.6rem 1.5rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -179,6 +230,7 @@ tr:hover {
   box-shadow: 0 2px 8px #0001;
   outline: none;
   margin: 0 0.2rem;
+  display: inline-block;
 }
 
 .dialog-content button:active {
@@ -207,5 +259,44 @@ tr:hover {
   background: linear-gradient(90deg, #b91c1c 60%, #dc2626 100%);
   color: #fff;
   border-color: #b91c1c;
+}
+/* Estilos para el buscar y el filtrado de comentarios  */
+.filtros-barra {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.input-busqueda {
+  border: 1.5px solid #a7f3d0;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  width: 220px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+  background: #f6fff8;
+}
+
+.input-busqueda:focus {
+  border-color: #38b2ac;
+  background: #e6fffa;
+}
+
+.select-filtro {
+  border: 1.5px solid #a7f3d0;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  background: #f6fff8;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.select-filtro:focus {
+  border-color: #38b2ac;
+  background: #e6fffa;
 }
 </style>
