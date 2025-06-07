@@ -9,6 +9,7 @@ import HomeView from '@/components/Views/HomeView.vue'
 import CategoriaDashboard from '../src/components/Views/Farmaceutico/GestionesVistas/CategoriaDashboard.vue'
 import CitasDashboard from './components/Views/Farmaceutico/GestionesVistas/CitasDashboard.vue'
 import UserDashBoard from './components/Views/Farmaceutico/GestionesVistas/UserDashBoard.vue'
+import ComentarioDashboard from './components/Views/Farmaceutico/GestionesVistas/ComentarioDashboard.vue'
 const routes = [
   {
     path: '/',
@@ -48,8 +49,12 @@ const routes = [
       path: "/Citas",
       component: CitasDashboard,
       meta: { requiresAuth: true, role: ['ADMIN', 'FARMACEUTICO'] }
-    }
-
+    },
+  {
+    path: '/Comentarios',
+    component: ComentarioDashboard,
+    meta: { requiresAuth: true, role: ['ADMIN', 'FARMACEUTICO'] } // Solo accesible para farmaceuticos
+  }
  
 ]
 

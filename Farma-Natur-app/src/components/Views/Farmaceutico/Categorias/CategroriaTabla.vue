@@ -1,6 +1,9 @@
 <template>
   <div>
     <h2 class="text-xl font-bold mb-4 text-green-700">Listado de Categorías</h2>
+    <button class="crear-btn" @click="abrirDialogCrear()">
+      <span>+ Crear Categoría</span>
+    </button>
     <table class="table-auto border-collapse w-full border border-gray-300 bg-gray-50">
       <thead class="bg-green-100">
         <tr>
@@ -113,12 +116,35 @@
       </div>
     </Teleport>
   </div>
+
+<!-- Dialogo para realizar el modal de crear categoria -->
+ <dialog ref="dialogCrear" class="dialog-crear">
+  <form @submit.prevent="crearNuevaCategoria" method="dialog" class="dialog-form">
+    <h2 class="modal-title" style="color:#22c55e;">Crear Categoría</h2>
+    <input
+      type="text"
+      v-model="nuevaCategoria.nombre"
+      required
+      maxlength="50"
+      placeholder="Nombre de la categoría"
+      class="dialog-input"
+    />
+    <div class="flex justify-center gap-4 mt-6">
+      <button type="button" class="custom-button bg-gray-200 text-gray-700" @click="cerrarDialogCrear">
+        <span>Cancelar</span>
+      </button>
+      <button type="submit" class="custom-button bg-green-500 text-white">
+        <span>Crear</span>
+      </button>
+    </div>
+  </form>
+</dialog>
 </template>
 
 <script setup>
 import IconButton from '../botones/IconButton.vue';
 import { onMounted, ref, watch } from 'vue';
-import { getCategorias, editCategoria, deleteCategoria, contarProductosPorCategoria } from '../services/categoriaServices.js';
+import { getCategorias, editCategoria, deleteCategoria, contarProductosPorCategoria, crearCategoria } from '../services/categoriaServices.js';
 
 const categorias = ref([]);
 const modalEditarVisible = ref(false);
@@ -127,6 +153,9 @@ const categoriaSeleccionada = ref('');
 const categoriaAEditar = ref({ id: null, nombre: '' });
 const categoriaAEliminarNombre = ref('');
 const conteoProductos = ref([]);
+const dialogCrear = ref(null);
+const nuevaCategoria = ref({ nombre: '' });
+
 
 watch([modalEditarVisible, modalEliminarVisible], ([editar, eliminar]) => {
   document.body.style.overflow = (editar || eliminar) ? 'hidden' : 'auto';
@@ -198,6 +227,28 @@ const cargarConteoProductos = async () => {
     conteoProductos.value = response.data;
   } catch (error) {
     console.error("Error al obtener el conteo de productos:", error);
+  }
+
+};
+
+const abrirDialogCrear = () => {
+  try {
+    nuevaCategoria.value = { nombre: '' };
+    dialogCrear.value?.showModal();
+  } catch (e) {
+    console.error('Error al abrir el dialog:', e);
+  }
+};
+const cerrarDialogCrear = () => {
+  dialogCrear.value.close();
+};
+const crearNuevaCategoria = async () => {
+  try {
+    await crearCategoria(nuevaCategoria.value);
+    await cargarCategorias();
+    cerrarDialogCrear();
+  } catch (error) {
+    console.error("Error al crear la categoría:", error);
   }
 };
 </script>
@@ -441,5 +492,62 @@ tr:hover {
 
 .custom-button-delete:hover::before {
   transform: translate3d(100%, 0, 0);
+}
+.dialog-crear {
+  border: none;
+  border-radius: 16px;
+  padding: 0;
+  width: 350px;
+  max-width: 90vw;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  background: #fff;
+  animation: modalIn 0.3s;
+  /* Centrado */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.dialog-form {
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.dialog-input {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 5px;
+  border: 1.5px solid #a7f3d0;
+  background: #f6fff8;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.dialog-input:focus {
+  border-color: #22c55e;
+  background: #e6fffa;
+}
+.crear-btn {
+  background: linear-gradient(90deg, #22c55e 0%, #4ade80 100%);
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 999px;
+  padding: 0.7rem 2rem;
+  margin-bottom: 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  box-shadow: 0 2px 8px #22c55e22;
+  display: inline-block;
+}
+.crear-btn:hover {
+  background: linear-gradient(90deg, #16a34a 0%, #22d3ee 100%);
+  color: #fff;
+  transform: translateY(-2px) scale(1.03);
 }
 </style>
