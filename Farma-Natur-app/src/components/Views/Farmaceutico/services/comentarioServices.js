@@ -12,3 +12,16 @@ export async function getAllComentarios(page = 0, size = 10, sort = ["id,asc"]) 
   }
   return await response.json();
 }
+export async function deleteComentario(clienteId,id) {
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('No autenticado');
+  const response = await fetch(`${API_URL}/eliminar/${clienteId}/${id}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error('Error al eliminar el comentario');
+  }
+}
