@@ -24,4 +24,29 @@ export async function deleteComentario(clienteId,id) {
   if (!response.ok) {
     throw new Error('Error al eliminar el comentario');
   }
+
+
+  export async function getProductoMasComentado() {
+  const res = await fetch("http://localhost:8080/comentario/producto-con-mas-comentarios");
+  if (!res.ok) throw new Error("Error al obtener el producto más comentado");
+  return await res.json();
+}
+
+export async function getClienteQueMasComenta() {
+  const res = await fetch("http://localhost:8080/comentario/cliente-que-mas-comenta");
+  if (!res.ok) throw new Error("Error al obtener el cliente que más comenta");
+  return await res.json();
+}
+
+export async function getTop3ProductosMasComentados() {
+  const res = await fetch("http://localhost:8080/comentario/top3-productos-mas-comentados");
+  if (!res.ok) throw new Error("Error al obtener el top 3 productos");
+  return await res.json();
+}
+
+export async function getMediaComentariosMes() {
+  const res = await fetch("http://localhost:8080/comentario/media-comentarios-mes");
+  if (!res.ok) throw new Error("Error al obtener la media de comentarios por mes");
+  return await res.json();
+}
 }

@@ -5,16 +5,48 @@ import FarmaHeader from '@/components/MicroComponents/Farmaceutico/FarmaHeader.v
 import ComentarioTabla from '../Comentario/ComentarioTabla.vue';
 import ComentarioMessage from '../messages/ComentarioMessage.vue';
 
+// Importa tus cards
+import ComentarioCardProducto from '../Comentario/Cards/ComentarioCardProducto.vue';
+import ComentarioCardCliente from '../Comentario/Cards/ComentarioCardCliente.vue';
+import ComentarioCardTTres from '../Comentario/Cards/ComentarioCardTTres.vue';
+import ComentarioCardPorMes from '../Comentario/Cards/ComentarioCardPorMes.vue';
+
+// Importa los servicios
+import {
+  getProductoMasComentado,
+  getClienteQueMasComenta,
+  getTop3ProductosMasComentados,
+  getMediaComentariosMes
+} from '../services/comentarioServices.js';
+
 const userName = ref('');
 const userRole = ref('');
 
-onMounted(() => {
+const productoMasComentado = ref(null);
+const clienteMasComenta = ref(null);
+const top3Productos = ref([]);
+const mediaComentariosMes = ref([]);
+
+onMounted(async () => {
   const token = localStorage.getItem('token');
   if (token) {
     const decoded = jwtDecode(token);
     userName.value = decoded.name || decoded.username || 'USERNAME';
     userRole.value = decoded.role || 'FARMACEUTICO';
   }
+  // Carga los datos para las cards
+  try {
+    productoMasComentado.value = await getProductoMasComentado();
+  } catch {}
+  try {
+    clienteMasComenta.value = await getClienteQueMasComenta();
+  } catch {}
+  try {
+    top3Productos.value = await getTop3ProductosMasComentados();
+  } catch {}
+  try {
+    mediaComentariosMes.value = await getMediaComentariosMes();
+  } catch {}
 });
 </script>
 
@@ -23,12 +55,16 @@ onMounted(() => {
 
   <div class="dashboard-container">
     <h1 class="dashboard-title">Gestión de Comentarios</h1>
+    <div class="comentario-cards-row">
+      <ComentarioCardProducto :producto="productoMasComentado" />
+      <ComentarioCardCliente :cliente="clienteMasComenta" />
+      <ComentarioCardTTres :productos="top3Productos" />
+      <ComentarioCardPorMes :media="mediaComentariosMes" />
+    </div>
     <div style="display: flex; flex-direction: row; align-items: flex-start; padding-left:50px;">
       <ComentarioMessage />
     </div>
-
     <hr style="width: 100%; border: none; border-top: 2px solid #e5e7eb; margin: 20px 0;" />
-
     <div class="comentario-layout">
       <div class="table-container">
         <ComentarioTabla />
@@ -48,6 +84,15 @@ onMounted(() => {
   padding: 0;
   margin-top: 200px;
   width: 100%;
+}
+.comentario-cards-row {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  margin-left: 30px;
+  margin-bottom: 16px;
+  justify-content: center;
+  align-items: flex-start;
 }
 .comentario-layout {
   display: flex;
