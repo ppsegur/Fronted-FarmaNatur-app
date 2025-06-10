@@ -9,14 +9,12 @@ import ComentarioMessage from '../messages/ComentarioMessage.vue';
 import ComentarioCardProducto from '../Comentario/Cards/ComentarioCardProducto.vue';
 import ComentarioCardCliente from '../Comentario/Cards/ComentarioCardCliente.vue';
 import ComentarioCardTTres from '../Comentario/Cards/ComentarioCardTTres.vue';
-import ComentarioCardPorMes from '../Comentario/Cards/ComentarioCardPorMes.vue';
 
 // Importa los servicios
 import {
   getProductoMasComentado,
   getClienteQueMasComenta,
   getTop3ProductosMasComentados,
-  getMediaComentariosMes
 } from '../services/comentarioServices.js';
 
 const userName = ref('');
@@ -55,16 +53,16 @@ onMounted(async () => {
 
   <div class="dashboard-container">
     <h1 class="dashboard-title">Gestión de Comentarios</h1>
-    <div class="comentario-cards-row">
-      <ComentarioCardProducto :producto="productoMasComentado" />
-      <ComentarioCardCliente :cliente="clienteMasComenta" />
-      <ComentarioCardTTres :productos="top3Productos" />
-      <ComentarioCardPorMes :media="mediaComentariosMes" />
-    </div>
+    
     <div style="display: flex; flex-direction: row; align-items: flex-start; padding-left:50px;">
       <ComentarioMessage />
     </div>
     <hr style="width: 100%; border: none; border-top: 2px solid #e5e7eb; margin: 20px 0;" />
+    <div class="comentario-cards-row">
+      <ComentarioCardProducto :producto="productoMasComentado" />
+      <ComentarioCardCliente :cliente="clienteMasComenta" />
+      <ComentarioCardTTres :productos="top3Productos" />
+    </div>
     <div class="comentario-layout">
       <div class="table-container">
         <ComentarioTabla />
