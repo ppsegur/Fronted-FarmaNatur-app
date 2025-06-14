@@ -24,4 +24,46 @@ export async function deleteComentario(clienteId,id) {
   if (!response.ok) {
     throw new Error('Error al eliminar el comentario');
   }
+
+
+ 
 }
+export async function getProductoMasComentado() {
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('No autenticado');
+  const res = await fetch("http://localhost:8080/comentario/producto-con-mas-comentarios", {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!res.ok) throw new Error("Error al obtener el producto más comentado");
+  return await res.json();
+}
+
+export async function getClienteQueMasComenta() {
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('No autenticado');
+  const res = await fetch("http://localhost:8080/comentario/cliente-que-mas-comenta", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!res.ok) throw new Error("Error al obtener el cliente que más comenta");
+  return await res.json();
+}
+
+export async function getTop3ProductosMasComentados() {
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('No autenticado');
+  const res = await fetch("http://localhost:8080/comentario/top3-productos-mas-comentados", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!res.ok) throw new Error("Error al obtener el top 3 productos");
+  return await res.json();
+}
+
+
+
