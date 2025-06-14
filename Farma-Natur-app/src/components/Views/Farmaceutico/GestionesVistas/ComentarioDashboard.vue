@@ -50,7 +50,10 @@ onMounted(async () => {
 
 <template>
   <FarmaHeader :userName="userName" :userRole="userRole" />
+  <div style="height: 340px;">
 
+  </div>
+ 
   <div class="dashboard-container">
     <h1 class="dashboard-title">Gestión de Comentarios</h1>
     
@@ -70,19 +73,19 @@ onMounted(async () => {
     </div>
   </div>
 </template>
-
 <style scoped>
 .dashboard-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  height: 100% !important;
+  min-height: 100vh; /* Ocupa toda la pantalla */
   background-color: #f3f4f6;
-  padding: 0;
-  margin-top: 200px;
+  padding: 0 0 40px 0;
+  margin-top: 0; /* Elimina el margen superior grande */
   width: 100%;
 }
+
 .comentario-cards-row {
   display: flex;
   flex-direction: row;
@@ -92,6 +95,7 @@ onMounted(async () => {
   justify-content: center;
   align-items: flex-start;
 }
+
 .comentario-layout {
   display: flex;
   flex-direction: row;
@@ -99,21 +103,25 @@ onMounted(async () => {
   align-items: flex-start;
   flex-wrap: wrap;
 }
+
 .dashboard-title {
   font-size: 2rem;
   font-weight: bold;
   margin: 10px 0 20px 20px;
   color: #1f2937;
-  margin-top: 70px;
+  margin-top: 40px; /* Puedes ajustar este valor si quieres más separación */
 }
+
 .table-container {
   background-color: #ffffff;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   padding: 20px;
   margin-left: 120px;
-  width: calc(100% -60px);
+  width: calc(100% - 60px);
   max-width: 800px;
   margin-bottom: 20px;
+  max-height: 70vh; /* Permite scroll interno si la tabla es muy alta */
+  overflow-y: auto;
 }
 </style>

@@ -93,11 +93,9 @@ async function crearCitaHandler(formData) {
 </script>
 <template>
   <FarmaHeader :userName="userName" :userRole="userRole" />
-  <br><br> <br>
-  <br><br> <br>
-  <br><br> <br>
-  <br><br> <br> 
-  <br><br> <br>
+<div style="height: 640px;">
+    <!-- Espacio para el header -->
+  </div>
   <div class="dashboard-container" style="padding-top: 150px;">
     <h1 class="dashboard-title" style="padding-left:20px;">Gestión de Citas</h1>
     <br>
