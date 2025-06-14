@@ -62,13 +62,7 @@ const closeNavBar = () => {
             <i class="pi pi-chevron-right arrow-icon"></i>
           </router-link>
         </li>
-        <li>
-          <router-link to="/pedidos" class="nav-link" @click="closeNavBar">
-            <i class="pi pi-shopping-cart nav-icon"></i>
-            <span class="nav-text">Pedidos</span>
-            <i class="pi pi-chevron-right arrow-icon"></i>
-          </router-link>
-        </li>
+       
         <li>
           <router-link to="/Citas" class="nav-link" @click="closeNavBar">
             <i class="pi pi-calendar nav-icon"></i>
@@ -135,7 +129,7 @@ const closeNavBar = () => {
 }
 
 .navbar {
-  width: 280px;
+  width: 480px;
   height: 100%;
   background: linear-gradient(160deg, #ffffff 0%, #e6f4ea 100%);
   box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
@@ -190,10 +184,6 @@ const closeNavBar = () => {
   transform: rotate(90deg);
 }
 
-.nav-links {
-  flex: 1;
-  padding: 20px;
-}
 
 .nav-link {
   display: flex;

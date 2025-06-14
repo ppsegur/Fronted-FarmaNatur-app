@@ -23,7 +23,7 @@ onMounted(() => {
 
 <template>
   <FarmaHeader :userName="userName" :userRole="userRole" />
-    <div style="height: 370px;"></div> <!-- Espacio para el header -->
+    <div style="height: 500px;"></div> 
   <div class="dashboard-container">
     <h1 class="dashboard-title">Gestión de Ventas</h1>
     <div style="display: flex; flex-direction: row; align-items: flex-start; padding-left:50px;">
