@@ -54,7 +54,7 @@ onMounted(() => {
   height: 100% !important;
   background-color: #f3f4f6; 
   padding: 0;
-  margin-top: 200px;
+  margin-top: 700px;
   width: 100% ;
 }
 .categoria-layout {
