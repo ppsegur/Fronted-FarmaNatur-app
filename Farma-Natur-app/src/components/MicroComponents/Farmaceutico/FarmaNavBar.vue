@@ -34,7 +34,7 @@ const closeNavBar = () => {
       
       <ul class="nav-links">
         <li>
-          <router-link to="/" class="nav-link" @click="closeNavBar">
+          <router-link to="/DASHBOARD" class="nav-link" @click="closeNavBar">
             <i class="pi pi-home nav-icon"></i>
             <span class="nav-text">Inicio</span>
             <i class="pi pi-chevron-right arrow-icon"></i>
