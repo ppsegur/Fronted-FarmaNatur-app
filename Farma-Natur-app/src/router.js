@@ -10,6 +10,7 @@ import CategoriaDashboard from '../src/components/Views/Farmaceutico/GestionesVi
 import CitasDashboard from './components/Views/Farmaceutico/GestionesVistas/CitasDashboard.vue'
 import UserDashBoard from './components/Views/Farmaceutico/GestionesVistas/UserDashBoard.vue'
 import ComentarioDashboard from './components/Views/Farmaceutico/GestionesVistas/ComentarioDashboard.vue'
+import VentasDashboard from './components/Views/Farmaceutico/GestionesVistas/VentasDashboard.vue'
 const routes = [
   {
     path: '/',
@@ -54,7 +55,12 @@ const routes = [
     path: '/Comentarios',
     component: ComentarioDashboard,
     meta: { requiresAuth: true, role: ['ADMIN', 'FARMACEUTICO'] } // Solo accesible para farmaceuticos
-  }
+  },
+{
+  path: '/Ventas',
+  component: VentasDashboard,
+  meta: { requiresAuth: true, role: ['ADMIN', 'FARMACEUTICO'] } // Solo accesible para farmaceuticos
+}
  
 ]
 
