@@ -93,8 +93,7 @@ async function crearCitaHandler(formData) {
 </script>
 <template>
   <FarmaHeader :userName="userName" :userRole="userRole" />
-<div style="height: 6
-40px;">
+<div style="height: 640px;">
     <!-- Espacio para el header -->
   </div>
   <div class="dashboard-container" style="padding-top: 150px;">
@@ -130,8 +129,12 @@ async function crearCitaHandler(formData) {
 
 <style scoped>
 .dashboard-container {
-  margin-top:20px;
+  margin-top: 50px;
+  padding-bottom: 40px;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
   background-color: #f3f4f6; /* Color de fondo gris claro */
+  width: 100%;
 }
 .dashboard-tabla {
    background: #fff;
