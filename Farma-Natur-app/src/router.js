@@ -12,6 +12,7 @@ import UserDashBoard from './components/Views/Farmaceutico/GestionesVistas/UserD
 import ComentarioDashboard from './components/Views/Farmaceutico/GestionesVistas/ComentarioDashboard.vue'
 import VentasDashboard from './components/Views/Farmaceutico/GestionesVistas/VentasDashboard.vue'
 import ProductoDashboard from './components/Views/Farmaceutico/GestionesVistas/ProductoDashboard.vue'
+import ProductDetail from '@/components/Views/cliente/Productos/Product-detail.vue';
 const routes = [
   {
     path: '/',
@@ -66,6 +67,12 @@ const routes = [
   path: '/Producto',
   component: ProductoDashboard,
   meta: { requiresAuth: true, role: ['ADMIN', 'FARMACEUTICO'] } // Solo accesible para farmaceuticos
+},
+{
+  path: '/product-detail/:id',
+  name: 'product-detail',
+  component: ProductDetail,
+  meta: { requiresAuth: false }
 }
  
 ]
