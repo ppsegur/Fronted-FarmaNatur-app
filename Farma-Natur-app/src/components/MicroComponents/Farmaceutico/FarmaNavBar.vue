@@ -41,7 +41,7 @@ const closeNavBar = () => {
           </router-link>
         </li>
         <li>
-          <router-link to="/productos" class="nav-link" @click="closeNavBar">
+          <router-link to="/Producto" class="nav-link" @click="closeNavBar">
             <i class="pi pi-shopping-bag nav-icon"></i>
             <span class="nav-text">Productos</span>
             <i class="pi pi-chevron-right arrow-icon"></i>
