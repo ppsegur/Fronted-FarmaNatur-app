@@ -1,72 +1,118 @@
 <template>
-  <div>
-    <h2 class="text-xl font-bold mb-4 text-green-700">Listado de Productos</h2>
-    <button class="crear-btn" @click="showCrear = true">+ Crear producto</button>
-    <table class="table-auto border-collapse w-full border border-gray-300 bg-gray-50">
-      <thead>
-        <tr>
-          <th>Imagen</th>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Precio</th>
-          <th>Stock</th>
-          <th>Categoría</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="producto in productos" :key="producto.id">
-          <td>
-            <img
-              v-if="producto.imagen || producto.url"
-              :src="getImgUrl(producto)"
-              alt="img"
-              style="width: 48px; height: 48px; object-fit: cover; border-radius: 8px;"
+    <div>
+        <h2 class="text-xl font-bold mb-4 text-green-700">Listado de Productos</h2>
+        <button class="crear-btn" @click="showCrear = true">+ Crear producto</button>
+
+        <!-- Filtros -->
+        <div style="display: flex; gap: 16px; margin-bottom: 18px; flex-wrap: wrap;">
+            <input
+                v-model="filtros.nombre"
+                placeholder="Filtrar por nombre"
+                class="crear-btn"
+                style="color: #222; background: #fff; border: 1px solid #ccc;"
             />
-          </td>
-          <td>{{ producto.nombre }}</td>
-          <td>{{ producto.descripcion }}</td>
-          <td>{{ producto.precio }} €</td>
-          <td>{{ producto.stock }}</td>
-          <td>{{ producto.categoria?.nombre || 'N/A' }}</td>
-          <td style="display: flex; gap: 8px;">
-            <IconButton tooltip="Editar" color="green" @click="openEditar(producto)">
-              <svg viewBox="0 0 24 24"><path fill="currentColor" d="M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-4.18A3 3 0 0 0 12 3a3 3 0 0 0-2.82 2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2zm7-16a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-2 6h2v6h-2zm0 8h2v2h-2z"/></svg>
-            </IconButton>
-            <IconButton tooltip="Eliminar" color="red" @click="openEliminar(producto)">
-              <svg viewBox="0 0 24 24"><path fill="currentColor" d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zm3.46-7.12a1 1 0 0 1 1.41 0l1.13 1.13 1.13-1.13a1 1 0 0 1 1.41 1.41l-1.13 1.13 1.13 1.13a1 1 0 0 1-1.41 1.41l-1.13-1.13-1.13 1.13a1 1 0 0 1-1.41-1.41l1.13-1.13-1.13-1.13a1 1 0 0 1 0-1.41z"/></svg>
-            </IconButton>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div style="display: flex; justify-content: center; gap: 16px; margin-top: 16px;">
-      <button :disabled="page === 0" @click="prevPage" class="crear-btn">Anterior</button>
-      <span>Página {{ page + 1 }}</span>
-      <button :disabled="isLastPage" @click="nextPage" class="crear-btn">Siguiente</button>
+            <input
+                v-model="filtros.categoria"
+                placeholder="Filtrar por categoría"
+                class="crear-btn"
+                style="color: #222; background: #fff; border: 1px solid #ccc;"
+            />
+            <input
+                v-model.number="filtros.precioMin"
+                type="number"
+                placeholder="Precio mínimo"
+                class="crear-btn"
+                style="color: #222; background: #fff; border: 1px solid #ccc; width: 120px;"
+            />
+            <input
+                v-model.number="filtros.precioMax"
+                type="number"
+                placeholder="Precio máximo"
+                class="crear-btn"
+                style="color: #222; background: #fff; border: 1px solid #ccc; width: 120px;"
+            />
+            <input
+                v-model.number="filtros.stockMin"
+                type="number"
+                placeholder="Stock mínimo"
+                class="crear-btn"
+                style="color: #222; background: #fff; border: 1px solid #ccc; width: 120px;"
+            />
+            <input
+                v-model.number="filtros.stockMax"
+                type="number"
+                placeholder="Stock máximo"
+                class="crear-btn"
+                style="color: #222; background: #fff; border: 1px solid #ccc; width: 120px;"
+            />
+            <button class="crear-btn" @click="resetFiltros" style="background: #888;">Limpiar filtros</button>
+        </div>
+
+        <table class="table-auto border-collapse w-full border border-gray-300 bg-gray-50">
+            <thead>
+                <tr>
+                    <th>Imagen</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Categoría</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="producto in productosFiltrados" :key="producto.id">
+                    <td>
+                        <img
+                            v-if="producto.imagen || producto.url"
+                            :src="getImgUrl(producto)"
+                            alt="img"
+                            style="width: 48px; height: 48px; object-fit: cover; border-radius: 8px;"
+                        />
+                    </td>
+                    <td>{{ producto.nombre }}</td>
+                    <td>{{ producto.descripcion }}</td>
+                    <td>{{ producto.precio }} €</td>
+                    <td>{{ producto.stock }}</td>
+                    <td>{{ producto.categoria?.nombre || 'N/A' }}</td>
+                    <td style="display: flex; gap: 8px;">
+                        <IconButton tooltip="Editar" color="green" @click="openEditar(producto)">
+                            <svg viewBox="0 0 24 24"><path fill="currentColor" d="M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-4.18A3 3 0 0 0 12 3a3 3 0 0 0-2.82 2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2zm7-16a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm-2 6h2v6h-2zm0 8h2v2h-2z"/></svg>
+                        </IconButton>
+                        <IconButton tooltip="Eliminar" color="red" @click="openEliminar(producto)">
+                            <svg viewBox="0 0 24 24"><path fill="currentColor" d="M6 19a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7H6zm3.46-7.12a1 1 0 0 1 1.41 0l1.13 1.13 1.13-1.13a1 1 0 0 1 1.41 1.41l-1.13 1.13 1.13 1.13a1 1 0 0 1-1.41 1.41l-1.13-1.13-1.13 1.13a1 1 0 0 1-1.41-1.41l1.13-1.13-1.13-1.13a1 1 0 0 1 0-1.41z"/></svg>
+                        </IconButton>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="display: flex; justify-content: center; gap: 16px; margin-top: 16px;">
+            <button :disabled="page === 0" @click="prevPage" class="crear-btn">Anterior</button>
+            <span>Página {{ page + 1 }}</span>
+            <button :disabled="isLastPage" @click="nextPage" class="crear-btn">Siguiente</button>
+        </div>
+        <ProductoDialogEditar
+            v-if="showEditar"
+            :producto="productoSeleccionado"
+            @close="showEditar = false"
+            @updated="fetchProductos"
+        />
+        <ProductoDialogEliminar
+            v-if="showEliminar"
+            :producto="productoSeleccionado"
+            @close="showEliminar = false"
+            @deleted="fetchProductos"
+        />
+        <ProductoDialogCrear
+            v-if="showCrear"
+            @close="showCrear = false"
+            @created="fetchProductos"
+        />
     </div>
-    <ProductoDialogEditar
-      v-if="showEditar"
-      :producto="productoSeleccionado"
-      @close="showEditar = false"
-      @updated="fetchProductos"
-    />
-    <ProductoDialogEliminar
-      v-if="showEliminar"
-      :producto="productoSeleccionado"
-      @close="showEliminar = false"
-      @deleted="fetchProductos"
-    />
-    <ProductoDialogCrear
-      v-if="showCrear"
-      @close="showCrear = false"
-      @created="fetchProductos"
-    />
-  </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { getProductos } from '../services/productoService.js';
 import IconButton from '../botones/IconButton.vue';
 import ProductoDialogEditar from './ProductoDialogEditar.vue';
@@ -82,6 +128,27 @@ const productoSeleccionado = ref(null);
 const page = ref(0);
 const size = ref(10);
 const isLastPage = ref(false);
+
+const filtros = ref({
+  nombre: '',
+  categoria: '',
+  precioMin: '',
+  precioMax: '',
+  stockMin: '',
+  stockMax: '',
+});
+
+const productosFiltrados = computed(() => {
+  return productos.value.filter(producto => {
+    const nombreMatch = filtros.value.nombre === '' || producto.nombre?.toLowerCase().includes(filtros.value.nombre.toLowerCase());
+    const categoriaMatch = filtros.value.categoria === '' || (producto.categoria?.nombre || '').toLowerCase().includes(filtros.value.categoria.toLowerCase());
+    const precioMinMatch = filtros.value.precioMin === '' || producto.precio >= filtros.value.precioMin;
+    const precioMaxMatch = filtros.value.precioMax === '' || producto.precio <= filtros.value.precioMax;
+    const stockMinMatch = filtros.value.stockMin === '' || producto.stock >= filtros.value.stockMin;
+    const stockMaxMatch = filtros.value.stockMax === '' || producto.stock <= filtros.value.stockMax;
+    return nombreMatch && categoriaMatch && precioMinMatch && precioMaxMatch && stockMinMatch && stockMaxMatch;
+  });
+});
 
 function getImgUrl(producto) {
   return producto.imagen || producto.url
@@ -125,6 +192,16 @@ function prevPage() {
     page.value--;
     fetchProductos();
   }
+}
+function resetFiltros() {
+  filtros.value = {
+    nombre: '',
+    categoria: '',
+    precioMin: '',
+    precioMax: '',
+    stockMin: '',
+    stockMax: '',
+  };
 }
 
 onMounted(fetchProductos);

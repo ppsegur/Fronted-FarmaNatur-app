@@ -1,9 +1,22 @@
 <template>
-    <nav style="background-color: green; padding: 1rem;">
-        <ul style="list-style: none; display: flex; gap: 1rem; margin: 0; padding: 0;">
-            <li><a href="#" style="color: white; text-decoration: none;">Home</a></li>
-            <li><a href="#" style="color: white; text-decoration: none;">About</a></li>
-            <li><a href="#" style="color: white; text-decoration: none;">Contact</a></li>
-        </ul>
-    </nav>
-</template>
+    <UserNav
+        :userName="userName"
+        @logout="handleLogout"
+        @back="handleBack"
+    />
+    </template>
+
+<script setup>
+import { ref } from 'vue';
+import UserNav from '@/components/MicroComponents/cliente/UserNav.vue';
+
+const userName = ref(''); // Aquí puedes obtener el nombre del usuario de tu lógica de autenticación
+const emit = defineEmits(['logout', 'back']);
+
+function handleLogout() {
+    emit('logout');
+}
+function handleBack() {
+    emit('back');
+}
+</script>
