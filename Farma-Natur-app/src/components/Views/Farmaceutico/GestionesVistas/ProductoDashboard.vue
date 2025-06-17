@@ -21,7 +21,7 @@ onMounted(() => {
 
 <template>
   <FarmaHeader :userName="userName" :userRole="userRole" />
-    <div style="height:600px;"></div>
+    <div style="height:900px;"></div>
   <div class="dashboard-container">
     <h1 class="dashboard-title">Gestión de Productos</h1>
 

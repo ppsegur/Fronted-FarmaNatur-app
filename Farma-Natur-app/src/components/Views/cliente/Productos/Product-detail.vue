@@ -29,7 +29,28 @@
           <div v-for="comentario in comentarios" :key="comentario.id" class="comentario-card">
             <div class="comentario-autor">{{ comentario.cliente?.username }}</div>
             <div class="comentario-texto">{{ comentario.comentario }}</div>
+            <button v-if="comentario.cliente?.username === userName" class="editar-comentario-btn" @click="abrirEditarComentario(comentario)">Editar</button>
           </div>
+        </div>
+        <form class="crear-comentario-form" @submit.prevent="crearComentario">
+          <textarea v-model="nuevoComentario" placeholder="Escribe tu comentario..." maxlength="255" required></textarea>
+          <button type="submit" class="add-comentario-btn" :disabled="creandoComentario">
+            <span v-if="!creandoComentario">Comentar</span>
+            <span v-else>Creando comentario...</span>
+          </button>
+        </form>
+        <div v-if="showEditModal" class="modal-overlay">
+          <div class="modal-form">
+            <h3>Editar comentario</h3>
+            <form @submit.prevent="editarComentario">
+              <textarea v-model="comentarioEditado" maxlength="255" required></textarea>
+              <button type="submit" class="add-comentario-btn" :disabled="editandoComentario">Guardar</button>
+              <button type="button" class="cancelar-btn" @click="showEditModal = false">Cancelar</button>
+            </form>
+          </div>
+        </div>
+        <div v-if="errorMsg" class="error-modal">
+          <span>{{ errorMsg }}</span>
         </div>
       </div>
     </div>
@@ -45,12 +66,20 @@ import imagenDefault from '@/assets/img/notfound.jpg';
 import { getComentariosDeProducto } from './productoUserService.js';
 import { getProductos } from '@/components/Views/Farmaceutico/services/productoService.js';
 import { addProductoAlCarrito } from '../Carrito/carritoServices.js';
+import { crearComentarioProducto, editarComentarioProducto  } from './comentarioUserService.js';
 
 const route = useRoute();
 const router = useRouter();
 const producto = ref({});
 const comentarios = ref([]);
-const userName = ref(''); // Puedes obtener el nombre real del usuario si tienes auth
+const userName = ref('');
+const nuevoComentario = ref("");
+const creandoComentario = ref(false);
+const showEditModal = ref(false);
+const comentarioEditado = ref("");
+const editandoComentario = ref(false);
+const errorMsg = ref("");
+let comentarioAEditar = null;
 
 function getImgUrl(producto) {
   return producto.imagen || producto.url
@@ -86,7 +115,57 @@ function goBack() {
   router.back();
 }
 
-onMounted(fetchProductoYComentarios);
+function abrirEditarComentario(comentario) {
+  comentarioAEditar = comentario;
+  comentarioEditado.value = comentario.comentario;
+  showEditModal.value = true;
+  errorMsg.value = "";
+}
+
+async function editarComentario() {
+  if (!comentarioAEditar) return;
+  editandoComentario.value = true;
+  try {
+    await editarComentarioProducto(producto.value.id, comentarioEditado.value);
+    showEditModal.value = false;
+    await fetchProductoYComentarios();
+  } catch (e) {
+    errorMsg.value = e.message || 'No se pudo editar el comentario';
+  } finally {
+    editandoComentario.value = false;
+  }
+}
+
+// Mostrar error de comentario duplicado
+async function crearComentario() {
+  if (!nuevoComentario.value.trim()) return;
+  creandoComentario.value = true;
+  errorMsg.value = "";
+  try {
+    await crearComentarioProducto(producto.value.id, nuevoComentario.value);
+    nuevoComentario.value = "";
+    await fetchProductoYComentarios();
+  } catch (e) {
+    // Si el backend devuelve un error 207 o similar, mostrar el mensaje
+    errorMsg.value = e?.detail || e?.message || 'No se pudo crear el comentario';
+  } finally {
+    creandoComentario.value = false;
+  }
+}
+
+// Obtener el username del usuario logueado (si tienes auth)
+onMounted(async () => {
+  // Buscar el producto y comentarios
+  await fetchProductoYComentarios();
+  // Obtener el username del usuario logueado
+  try {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      userName.value = payload.username;
+    }
+  } catch {}
+});
 </script>
 
 <style scoped>
@@ -205,5 +284,103 @@ onMounted(fetchProductoYComentarios);
 }
 .back-btn:hover {
   color: #1a7a1a;
+}
+.crear-comentario-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 24px;
+}
+.crear-comentario-form textarea {
+  min-height: 60px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 10px 14px;
+  font-size: 1rem;
+  resize: vertical;
+}
+.add-comentario-btn {
+  align-self: flex-end;
+  background: #269b24;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 22px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.add-comentario-btn:hover {
+  background: #1a7a1a;
+}
+.editar-comentario-btn {
+  background: #ffc107;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 8px;
+}
+.editar-comentario-btn:hover {
+  background: #e0a800;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-form {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 500px;
+}
+.modal-form h3 {
+  margin-bottom: 16px;
+  font-size: 1.5rem;
+  color: #269b24;
+}
+.error-modal {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #f44336;
+  color: #fff;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: opacity 0.3s;
+}
+.error-modal span {
+  display: block;
+  font-weight: 500;
+}
+.cancelar-btn {
+  background: #ccc;
+  color: #333;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.cancelar-btn:hover {
+  background: #bbb;
 }
 </style>
