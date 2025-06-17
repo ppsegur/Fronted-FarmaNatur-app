@@ -3,8 +3,9 @@
         <ul>
             <li><router-link to="/" class="nav-link" active-class="active">HOME</router-link></li>
             <li><router-link to="/catalogo" class="nav-link" active-class="active">CATÁLOGO</router-link></li>
-            <li><router-link to="/carrito" class="nav-link" active-class="active">CARRITO</router-link></li>
+            <li><button class="nav-link" @click="$emit('abrir-carrito')">CARRITO</button></li>
             <li><router-link to="/historial" class="nav-link" active-class="active">HISTORIAL</router-link></li>
+            <li><router-link to="/mis-citas" class="nav-link" active-class="active">CITAS</router-link></li>
             <li class="profile-dropdown">
                 <router-link to="/" custom v-slot="{ navigate }">
                   <button class="profile-btn" @click="dropdownOpen = !dropdownOpen">

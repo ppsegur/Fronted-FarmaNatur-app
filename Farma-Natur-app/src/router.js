@@ -13,6 +13,8 @@ import ComentarioDashboard from './components/Views/Farmaceutico/GestionesVistas
 import VentasDashboard from './components/Views/Farmaceutico/GestionesVistas/VentasDashboard.vue'
 import ProductoDashboard from './components/Views/Farmaceutico/GestionesVistas/ProductoDashboard.vue'
 import ProductDetail from '@/components/Views/cliente/Productos/Product-detail.vue';
+import ProductList from './components/Views/cliente/Productos/ProductList.vue'
+import CitaUser from './components/Views/cliente/Citas/CitaUser.vue'
 const routes = [
   {
     path: '/',
@@ -77,6 +79,16 @@ const routes = [
 {
   path: '/historial',
   component: () => import('@/components/Views/cliente/Carrito/HistorialView.vue'),
+  meta: { requiresAuth: true }
+},
+{
+  path: '/catalogo',
+  component: ProductList,
+  meta: { requiresAuth: true }
+},
+{
+  path: '/mis-citas',
+  component: CitaUser,
   meta: { requiresAuth: true }
 }
  

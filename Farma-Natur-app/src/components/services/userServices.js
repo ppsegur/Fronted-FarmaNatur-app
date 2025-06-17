@@ -14,7 +14,7 @@ if (token) {
     const decoded = jwtDecode(token);
     console.log(decoded);
     console.log('Token decodificado:', decoded)
-
+console.log('Token decodificado:', decoded)
     
     if (!decoded.verified) {
       console.error('El usuario no está verificado.');
