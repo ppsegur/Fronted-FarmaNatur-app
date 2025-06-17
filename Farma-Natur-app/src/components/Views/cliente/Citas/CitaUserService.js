@@ -9,3 +9,17 @@ export async function getCitasByCliente(username) {
   return await res.json();
 }
 
+export async function solicitarCitaPorEmail(dto) {
+  const token = localStorage.getItem('token');
+  const res = await fetch('http://localhost:8080/citas/solicitar', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    },
+    body: JSON.stringify(dto)
+  });
+  if (!res.ok) throw new Error('No se pudo enviar la solicitud de cita');
+  return await res.json();
+}
+

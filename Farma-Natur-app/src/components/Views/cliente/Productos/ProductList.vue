@@ -14,6 +14,8 @@
     <br/><br/>
     <br/><br/>
     <br/><br/>
+    <br/><br/>
+    <br/><br/>
   
    
     
@@ -22,6 +24,14 @@
     <UserNav :userName="userName" @abrir-carrito="showCarrito = true" />
     <div class="product-list-container">
       <h2 class="product-list-title">Catálogo de Productos</h2>
+      <div class="filtros-bar">
+        <input v-model="searchTerm" @keyup.enter="onSearch" placeholder="Buscar producto..." class="search-input" />
+        <select v-model="selectedCategoria" @change="onCategoriaChange" class="categoria-select">
+          <option value="">Todas las categorías</option>
+          <option v-for="cat in categorias" :key="cat.id" :value="cat.nombre">{{ cat.nombre }}</option>
+        </select>
+        <button @click="onSearch" class="buscar-btn">Buscar</button>
+      </div>
       <div class="productos-grid">
         <div v-for="producto in productos" :key="producto.id" class="producto-card">
           <img :src="getImgUrlCard(producto)" alt="img" class="producto-img" @error="onImgError($event)" @click="goToDetail(producto)" />
@@ -52,6 +62,7 @@ import UserNav from '@/components/MicroComponents/cliente/UserNav.vue';
 import { useRouter } from 'vue-router';
 import imagenDefault from '@/assets/img/notfound.jpg';
 import { getProductos } from '@/components/Views/Farmaceutico/services/productoService.js';
+import { getCategorias } from '@/components/Views/Farmaceutico/services/categoriaServices.js';
 import { addProductoAlCarrito } from '../Carrito/carritoServices.js';
 import CarritoModal from '../Carrito/CarritoModal.vue';
 
@@ -63,6 +74,9 @@ const userName = ref('');
 const router = useRouter();
 const showCarrito = ref(false);
 const showSuccess = ref(false);
+const searchTerm = ref('');
+const selectedCategoria = ref('');
+const categorias = ref([]);
 
 function getImgUrlCard(producto) {
   return producto.imagen || producto.url
@@ -73,20 +87,41 @@ function onImgError(event) {
   event.target.src = imagenDefault;
 }
 
+async function fetchCategorias() {
+  try {
+    categorias.value = await getCategorias();
+  } catch (e) {
+    categorias.value = [];
+  }
+}
+
 async function fetchProductos() {
   try {
-    const data = await getProductos(page.value, size.value);
-    if (data && Array.isArray(data.content)) {
-      productos.value = data.content;
-      hasMore.value = data.content.length === size.value;
-    } else {
-      productos.value = data;
-      hasMore.value = false;
+    let productosData = await getProductos(page.value, size.value);
+    let lista = productosData.content || productosData;
+    // Filtrado en frontend si searchTerm o selectedCategoria
+    if (searchTerm.value) {
+      lista = lista.filter(p => p.nombre.toLowerCase().includes(searchTerm.value.toLowerCase()));
     }
+    if (selectedCategoria.value) {
+      lista = lista.filter(p => p.categoria && p.categoria.nombre === selectedCategoria.value);
+    }
+    productos.value = lista;
+    hasMore.value = lista.length === size.value;
   } catch (e) {
     productos.value = [];
     hasMore.value = false;
   }
+}
+
+function onSearch() {
+  page.value = 0;
+  fetchProductos();
+}
+
+function onCategoriaChange() {
+  page.value = 0;
+  fetchProductos();
 }
 
 function prevPage() {
@@ -100,7 +135,7 @@ function nextPage() {
   }
 }
 
-watch(page, () => {
+watch([page, searchTerm, selectedCategoria], () => {
   fetchProductos();
   // Opcional: hacer scroll al top de la lista
   const container = document.querySelector('.product-list-container');
@@ -121,7 +156,10 @@ async function addToCart(producto) {
   }
 }
 
-onMounted(fetchProductos);
+onMounted(() => {
+  fetchCategorias();
+  fetchProductos();
+});
 </script>
 
 <style scoped>
@@ -141,6 +179,41 @@ onMounted(fetchProductos);
   color: #269b24;
   margin-bottom: 32px;
   text-align: center;
+}
+.filtros-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.search-input {
+  flex: 1;
+  padding: 10px 16px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+.categoria-select {
+  padding: 10px 16px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+}
+.buscar-btn {
+  background: #269b24;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.buscar-btn:hover {
+  background: #1a7a1a;
 }
 .productos-grid {
   display: grid;
