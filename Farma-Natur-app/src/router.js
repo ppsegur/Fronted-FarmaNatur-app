@@ -73,6 +73,11 @@ const routes = [
   name: 'product-detail',
   component: ProductDetail,
   meta: { requiresAuth: false }
+},
+{
+  path: '/historial',
+  component: () => import('@/components/Views/cliente/Carrito/HistorialView.vue'),
+  meta: { requiresAuth: true }
 }
  
 ]
