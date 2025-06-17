@@ -44,6 +44,7 @@ import UserNav from '@/components/MicroComponents/cliente/UserNav.vue';
 import imagenDefault from '@/assets/img/notfound.jpg';
 import { getComentariosDeProducto } from './productoUserService.js';
 import { getProductos } from '@/components/Views/Farmaceutico/services/productoService.js';
+import { addProductoAlCarrito } from '../Carrito/carritoServices.js';
 
 const route = useRoute();
 const router = useRouter();
@@ -76,8 +77,9 @@ async function fetchProductoYComentarios() {
 }
 
 function addToCart() {
-  // Aquí va la lógica para añadir al carrito
-  alert('Producto añadido al carrito (demo)');
+  addProductoAlCarrito(producto.value)
+    .then(() => alert('Producto añadido al carrito'))
+    .catch(() => alert('Error al añadir al carrito'));
 }
 
 function goBack() {
